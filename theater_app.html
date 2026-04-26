@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>観劇手帳</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf7f2;--bg2:#f2ede5;--bg3:#e8e0d4;
+  --border:#d4c8b8;--border2:#c0b09a;
+  --text:#3a2e22;--text2:#6a5a48;--text3:#9a8a78;
+  --accent:#c97060;--accent2:#e8907a;
+  --blue:#6090c0;--green:#60a060;--purple:#9060b0;
+  --red:#d04040;
+  --radius:10px;--radius-sm:6px;
+  --shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+body{font-family:"Hiragino Kaku Gothic Pro","Meiryo",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:440px;margin:0 auto;padding-bottom:80px}
+.tab-bar{display:flex;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.tab{flex:1;padding:12px 4px;font-size:11px;font-weight:600;text-align:center;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;letter-spacing:.5px}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.pane{display:none;padding:16px}
+.pane.active{display:block}
+.section-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;letter-spacing:.5px}
+.subsection{font-size:12px;font-weight:600;color:var(--text2);margin:16px 0 8px;letter-spacing:.5px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px}
+.badge.today{background:#fde8e0;color:#c04030}
+.badge.tomorrow{background:#fef0d0;color:#b07020}
+.badge.self{background:#ffe0e0;color:var(--red)}
+.badge.companion{background:#e0f0e0;color:#408040}
+.badge.duplicate{background:#e8e0f0;color:#6040a0}
+label.field{display:block;font-size:11px;font-weight:600;color:var(--text2);margin:10px 0 4px;letter-spacing:.3px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text);background:#fff;transition:border .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+textarea{resize:vertical;min-height:60px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{display:block;width:100%;padding:11px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;color:var(--text);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;text-align:center;margin-top:10px;transition:all .2s}
+.btn:hover{background:var(--bg2)}
+.btn.primary{background:var(--accent);color:#fff;border:none}
+.btn.primary:hover{background:var(--accent2)}
+.btn.sm{padding:6px 12px;font-size:12px;width:auto;margin-top:0}
+.btn.danger{color:var(--red);border-color:#f0c0c0}
+.btn.excel{background:#1d6f42;color:#fff;border:none}
+.btn.excel:hover{background:#2a8a52}
+.row-flex{display:flex;align-items:center;gap:8px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--border);border-radius:999px;font-size:12px;cursor:pointer;background:#fff;color:var(--text2);transition:all .2s}
+.chip.selected{background:var(--text);color:#fff;border-color:var(--text)}
+.check-group{display:flex;gap:16px;flex-wrap:wrap;padding:8px 0}
+.check-item{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--text)}
+.check-item input[type=radio]{width:16px;height:16px;cursor:pointer;accent-color:var(--accent)}
+.seat-container{position:relative;width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--bg2);min-height:180px}
+.seat-img{width:100%;display:block}
+.seat-marker{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.35);z-index:5}
+.seat-marker.self-mark{background:var(--red);width:28px;height:28px}
+.seat-marker.other-mark{background:var(--blue);width:22px;height:22px;opacity:.8}
+.seat-placeholder{display:flex;align-items:center;justify-content:center;min-height:180px;color:var(--text3);font-size:13px;flex-direction:column;gap:8px}
+.info-row{display:flex;gap:6px;font-size:13px;margin:3px 0;align-items:flex-start}
+.info-label{font-size:11px;font-weight:600;color:var(--text3);min-width:56px;padding-top:1px}
+.del-btn{font-size:11px;color:var(--red);cursor:pointer;background:none;border:none;padding:2px 6px;margin-left:auto;font-family:inherit}
+.upload-area{border:1.5px dashed var(--border2);border-radius:var(--radius);padding:16px;text-align:center;font-size:13px;color:var(--text3);cursor:pointer;transition:all .2s}
+.upload-area:hover{background:var(--bg2);border-color:var(--accent)}
+.empty{text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px}
+.loading{text-align:center;padding:2rem;color:var(--text3);font-size:13px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab(0)">今日・明日</div>
+    <div class="tab" onclick="switchTab(1)">座席表</div>
+    <div class="tab" onclick="switchTab(2)">登録</div>
+  </div>
+
+  <div class="pane active" id="pane0"><div class="loading">読み込み中...</div></div>
+  <div class="pane" id="pane1"><div class="loading">読み込み中...</div></div>
+  <div class="pane" id="pane2"><div class="loading">読み込み中...</div></div>
+</div>
+
+<script>
+// =============================================
+// IndexedDB セットアップ
+// =============================================
+const DB_NAME = 'TheaterAppDB';
+const DB_VERSION = 1;
+let db = null;
+
+const DEFAULT_THEATERS = [
+  {id:'t_ginga',  name:'天王洲アイル 銀河劇場',       place:'東京・天王洲アイル', address:'〒140-0002 東京都品川区東品川2-1-3'},
+  {id:'t_stella', name:'品川プリンス ステラボール',     place:'東京・品川',         address:'〒108-8611 東京都港区高輪4-10-30 品川プリンスホテル内'},
+  {id:'t_hika',   name:'シアターH',                   place:'東京・大井町',       address:'〒140-0012 東京都品川区勝島1-6-29'},
+  {id:'t_mbs',    name:'skyシアターMBS',               place:'大阪・難波',         address:'〒542-0076 大阪府大阪市中央区難波5-1-60 なんばスカイオ12F'},
+  {id:'t_tachi',  name:'立川ステージガーデン',          place:'東京・立川',         address:'〒190-0014 東京都立川市緑町3-1 GREEN SPRINGS W3棟'},
+  {id:'t_seinen', name:'日本青年館ホール',              place:'東京・外苑前',       address:'〒160-0013 東京都新宿区霞ヶ丘町4-1'},
+  {id:'t_sun',    name:'サンシャイン劇場',              place:'東京・池袋',         address:'〒170-0013 東京都豊島区東池袋3-1-4 サンシャインシティ文化会館4F'},
+  {id:'t_aiia',   name:'AiiA 2.5 Theater Kobe',       place:'兵庫・神戸',         address:'〒651-0096 兵庫県神戸市中央区雲井通7-1-1 ミント神戸14F'},
+  {id:'t_sanmall',name:'シアターサンモール',            place:'東京・新宿',         address:'〒160-0022 東京都新宿区新宿3-14-20 サンモールビルB2F'},
+  {id:'t_zero',   name:'全労災ホール スペース・ゼロ',   place:'東京・新宿',         address:'〒151-0053 東京都渋谷区代々木2-12-10'},
+];
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('theaters')) {
+        db.createObjectStore('theaters', {keyPath:'id'});
+      }
+      if (!db.objectStoreNames.contains('performances')) {
+        const ps = db.createObjectStore('performances', {keyPath:'id'});
+        ps.createIndex('datetime', 'datetime', {unique:false});
+      }
+      if (!db.objectStoreNames.contains('titles')) {
+        db.createObjectStore('titles', {keyPath:'id', autoIncrement:true});
+      }
+      if (!db.objectStoreNames.contains('images')) {
+        // 画像は別ストアに保存（大きいデータの分離）
+        db.createObjectStore('images', {keyPath:'theaterId'});
+      }
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e.target.error);
+  });
+}
+
+function dbGetAll(storeName) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readonly');
+    const req = tx.objectStore(storeName).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+function dbPut(storeName, obj) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readwrite');
+    const req = tx.objectStore(storeName).put(obj);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+function dbDelete(storeName, key) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readwrite');
+    const req = tx.objectStore(storeName).delete(key);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+function dbGet(storeName, key) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readonly');
+    const req = tx.objectStore(storeName).get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+// =============================================
+// アプリ初期化
+// =============================================
+let theaters = [];
+let performances = [];
+let titles = [];
+let images = {}; // {theaterId: dataURL}
+
+async function initApp() {
+  db = await openDB();
+
+  // 劇場初期データ投入（初回のみ）
+  const existingTheaters = await dbGetAll('theaters');
+  if (existingTheaters.length === 0) {
+    for (const t of DEFAULT_THEATERS) {
+      await dbPut('theaters', t);
+    }
+  } else {
+    // 新劇場を追加（IDで重複チェック）
+    const existingIds = existingTheaters.map(t => t.id);
+    for (const t of DEFAULT_THEATERS) {
+      if (!existingIds.includes(t.id)) await dbPut('theaters', t);
+    }
+    // シアターHの住所を修正
+    const hika = existingTheaters.find(t => t.id === 't_hika');
+    if (hika && hika.place !== '東京・大井町') {
+      hika.place = '東京・大井町';
+      hika.address = '〒140-0012 東京都品川区勝島1-6-29';
+      await dbPut('theaters', hika);
+    }
+  }
+
+  // タイトル初期データ
+  const existingTitles = await dbGetAll('titles');
+  if (existingTitles.length === 0) {
+    await dbPut('titles', {id:1, name:'スキップとローファー ミュージカル'});
+  }
+
+  await reloadAll();
+  renderCurrentTab();
+}
+
+async function reloadAll() {
+  theaters = await dbGetAll('theaters');
+  performances = await dbGetAll('performances');
+  const ts = await dbGetAll('titles');
+  titles = ts.map(t => t.name);
+  // 画像を読み込み
+  const imgs = await dbGetAll('images');
+  images = {};
+  imgs.forEach(i => { images[i.theaterId] = i.dataUrl; });
+}
+
+// =============================================
+// ユーティリティ
+// =============================================
+function fmtDt(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const days = ['日','月','火','水','木','金','土'];
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function isToday(iso) {
+  const d = new Date(iso), n = new Date();
+  return d.toDateString() === n.toDateString();
+}
+function isTomorrow(iso) {
+  const d = new Date(iso), t = new Date(); t.setDate(t.getDate()+1);
+  return d.toDateString() === t.toDateString();
+}
+function getTheater(id) { return theaters.find(t => t.id === id) || {}; }
+function typeLabel(type) { return {self:'自分用', companion:'連番用', duplicate:'重複分'}[type] || type; }
+function typeBadgeClass(type) { return {self:'self', companion:'companion', duplicate:'duplicate'}[type] || ''; }
+
+// =============================================
+// タブ管理
+// =============================================
+let currentTab = 0;
+function switchTab(i) {
+  currentTab = i;
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
+  document.querySelectorAll('.pane').forEach((p,j) => p.classList.toggle('active', i===j));
+  renderCurrentTab();
+}
+function renderCurrentTab() {
+  if (currentTab === 0) renderToday();
+  if (currentTab === 1) renderSeatView();
+  if (currentTab === 2) renderRegPage();
+}
+
+// =============================================
+// TAB1: 今日・明日
+// =============================================
+function renderToday() {
+  const todayP = performances.filter(p => isToday(p.datetime));
+  const tmP = performances.filter(p => isTomorrow(p.datetime));
+  const el = document.getElementById('pane0');
+  if (!todayP.length && !tmP.length) {
+    el.innerHTML = '<div class="empty">今日・明日の公演はありません</div>';
+    return;
+  }
+  let html = '<div style="padding:16px">';
+  if (todayP.length) {
+    html += '<div class="subsection">今日の公演</div>';
+    todayP.forEach(p => { html += buildPerfCard(p, 'today'); });
+  }
+  if (tmP.length) {
+    html += '<div class="subsection">明日の公演</div>';
+    tmP.forEach(p => { html += buildPerfCard(p, 'tomorrow'); });
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function buildPerfCard(p, when) {
+  const th = getTheater(p.theaterId);
+  return `<div class="card">
+    <div class="card-header">
+      <span class="badge ${when}">${when==='today'?'今日':'明日'}</span>
+      <span class="badge ${typeBadgeClass(p.type)}">${typeLabel(p.type)}</span>
+      <span style="font-size:14px;font-weight:700">${th.name||'不明'}</span>
+    </div>
+    ${p.title ? `<div class="info-row"><span class="info-label">タイトル</span>${p.title}</div>` : ''}
+    <div class="info-row"><span class="info-label">日時</span>${fmtDt(p.datetime)}</div>
+    <div class="info-row"><span class="info-label">場所</span>${th.place||'—'}</div>
+    <div class="info-row"><span class="info-label">座席</span>${p.rowLabel||''}列 ${p.seatNum||''}番 × ${p.count}枚</div>
+    <div style="margin-top:8px">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:4px">メモ</div>
+      <textarea style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;background:#fff;resize:vertical;min-height:50px" onchange="saveMemo('${p.id}',this.value)">${p.memo||''}</textarea>
+    </div>
+  </div>`;
+}
+
+async function saveMemo(id, val) {
+  const p = performances.find(x => x.id===id);
+  if (p) { p.memo = val; await dbPut('performances', p); }
+}
+
+// =============================================
+// TAB2: 座席表
+// =============================================
+let selectedTheater = null;
+
+function renderSeatView() {
+  const el = document.getElementById('pane1');
+  const chips = theaters.map(t =>
+    `<div class="chip${selectedTheater===t.id?' selected':''}" onclick="selectTheater('${t.id}')">${t.name}</div>`
+  ).join('');
+
+  let seatHtml = '';
+  if (!selectedTheater) {
+    seatHtml = '<div class="seat-placeholder">劇場を選択してください</div>';
+  } else {
+    const th = getTheater(selectedTheater);
+    const img = images[selectedTheater];
+    const perfs = performances.filter(p => p.theaterId === selectedTheater);
+
+    seatHtml = `
+      <div style="font-weight:700;font-size:15px;margin-bottom:2px">${th.name}</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:2px">${th.place||''}</div>
+      ${th.address ? `<div style="font-size:11px;color:var(--text3);margin-bottom:10px">${th.address}</div>` : ''}
+      <div class="seat-container">`;
+
+    if (img) {
+      seatHtml += `<img class="seat-img" src="${img}" alt="座席表">`;
+      perfs.forEach(p => {
+        if (p.markerX && p.markerY) {
+          const cls = p.type === 'self' ? 'self-mark' : 'other-mark';
+          const label = `${p.rowLabel||''}${p.seatNum||''}`;
+          seatHtml += `<div class="seat-marker ${cls}" style="left:${p.markerX}%;top:${p.markerY}%" title="${fmtDt(p.datetime)} ${label}">${label}</div>`;
+        }
+      });
+    } else {
+      seatHtml += `<div class="seat-placeholder">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="14" width="32" height="20" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/><rect x="24" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/></svg>
+        <span>座席表画像が未登録です</span></div>`;
+    }
+    seatHtml += '</div>';
+
+    if (perfs.length) {
+      seatHtml += '<div style="margin-top:12px"><div class="subsection">この劇場の登録公演</div>';
+      perfs.sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).forEach(p => {
+        seatHtml += `<div class="card" style="padding:10px 12px">
+          <div class="row-flex">
+            <span class="badge ${typeBadgeClass(p.type)}" style="font-size:10px">${typeLabel(p.type)}</span>
+            ${p.title ? `<span style="font-size:12px;font-weight:600">${p.title}</span>` : ''}
+          </div>
+          <div class="info-row" style="margin-top:6px"><span class="info-label">日時</span>${fmtDt(p.datetime)}</div>
+          <div class="info-row"><span class="info-label">座席</span>${p.rowLabel||''}列 ${p.seatNum||''}番 × ${p.count}枚</div>
+        </div>`;
+      });
+      seatHtml += '</div>';
+    }
+  }
+
+  el.innerHTML = `<div style="padding:16px">
+    <div class="section-title">劇場を選択</div>
+    <div class="chips-wrap">${chips}</div>
+    <div id="seat-detail">${seatHtml}</div>
+  </div>`;
+}
+
+function selectTheater(id) { selectedTheater = id; renderSeatView(); }
+
+// =============================================
+// TAB3: 登録ページ
+// =============================================
+function renderRegPage() {
+  const titleOpts = '<option value="">タイトルを選択</option>' +
+    titles.map(t => `<option value="${t}">${t}</option>`).join('');
+  const theaterOpts = '<option value="">劇場を選択</option>' +
+    theaters.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+  const rowOpts = ['','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q']
+    .map(r => `<option value="${r}">${r||'選択'}</option>`).join('');
+
+  const titleListHtml = titles.length
+    ? titles.map((t,i) => `<div class="card" style="padding:10px 12px"><div class="row-flex"><span style="font-size:13px">${t}</span><button class="del-btn" onclick="deleteTitle(${i})">削除</button></div></div>`).join('')
+    : '<div style="font-size:13px;color:var(--text3);padding:4px 0">未登録</div>';
+
+  const perfListHtml = performances.length
+    ? [...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p => {
+        const th = getTheater(p.theaterId);
+        return `<div class="card" style="padding:10px 12px">
+          <div class="row-flex">
+            <span class="badge ${typeBadgeClass(p.type)}" style="font-size:10px">${typeLabel(p.type)}</span>
+            <span style="font-size:13px;font-weight:600">${th.name||'不明'}</span>
+            <button class="del-btn" onclick="deletePerf('${p.id}')">削除</button>
+          </div>
+          ${p.title ? `<div style="font-size:12px;color:var(--text2);margin-top:4px">${p.title}</div>` : ''}
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">${fmtDt(p.datetime)} ／ ${p.rowLabel||''}列${p.seatNum||''}番 × ${p.count}枚</div>
+        </div>`;
+      }).join('')
+    : '<div class="empty">まだ登録されていません</div>';
+
+  document.getElementById('pane2').innerHTML = `<div style="padding:16px">
+    <div class="section-title">公演を登録</div>
+
+    <label class="field">公演タイトル *</label>
+    <div class="row-flex">
+      <select id="reg-title" style="flex:1">${titleOpts}</select>
+      <button class="btn sm" onclick="showAddTitle()">＋追加</button>
+    </div>
+    <div id="add-title-form" style="display:none;margin-top:8px">
+      <div class="row-flex">
+        <input type="text" id="new-title-input" placeholder="公演タイトルを入力" style="flex:1">
+        <button class="btn sm primary" onclick="saveTitle()">保存</button>
+        <button class="btn sm" onclick="hideAddTitle()">✕</button>
+      </div>
+    </div>
+
+    <label class="field">劇場 *</label>
+    <select id="reg-theater">${theaterOpts}</select>
+
+    <label class="field">公演日時 *</label>
+    <input type="datetime-local" id="reg-datetime">
+
+    <div class="grid2">
+      <div>
+        <label class="field">列 *</label>
+        <select id="reg-row">${rowOpts}</select>
+      </div>
+      <div>
+        <label class="field">番号 *</label>
+        <input type="number" id="reg-num" placeholder="例: 15" min="1" max="40">
+      </div>
+    </div>
+
+    <label class="field">枚数</label>
+    <input type="number" id="reg-count" value="1" min="1" max="10">
+
+    <label class="field">チケット種別 *</label>
+    <div class="check-group">
+      <label class="check-item"><input type="radio" name="ttype" value="self" checked> 自分用</label>
+      <label class="check-item"><input type="radio" name="ttype" value="companion"> 連番用</label>
+      <label class="check-item"><input type="radio" name="ttype" value="duplicate"> 重複分</label>
+    </div>
+
+    <label class="field">メモ</label>
+    <textarea id="reg-memo" placeholder="キャスト、感想など自由に"></textarea>
+
+    <button class="btn primary" onclick="addPerformance()">登録する</button>
+
+    <div class="divider"></div>
+    <div class="section-title">データ出力</div>
+    <button class="btn excel" onclick="exportExcel()">📊 Excelファイルを出力（CSV）</button>
+
+    <div class="divider"></div>
+    <div class="section-title">公演タイトル管理</div>
+    ${titleListHtml}
+
+    <div class="divider"></div>
+    <div class="section-title">劇場を登録</div>
+    <label class="field">劇場名 *</label>
+    <input type="text" id="th-name" placeholder="例: 帝国劇場">
+    <label class="field">場所（土地名）</label>
+    <input type="text" id="th-place" placeholder="例: 東京・日比谷">
+    <label class="field">住所</label>
+    <input type="text" id="th-address" placeholder="〒xxx-xxxx 都道府県…">
+    <label class="field">座席表画像（PNG/JPG）</label>
+    <div class="upload-area" id="upload-area" onclick="document.getElementById('th-img').click()">
+      <div id="img-label">📁 タップして画像を選択</div>
+    </div>
+    <input type="file" id="th-img" accept="image/*" style="display:none" onchange="previewImg(this)">
+    <img id="img-preview" style="display:none;width:100%;border-radius:var(--radius);margin-top:8px;border:1px solid var(--border)">
+    <button class="btn" onclick="addTheater()">劇場を追加</button>
+
+    <div class="divider"></div>
+    <div class="section-title">登録済み公演一覧</div>
+    ${perfListHtml}
+  </div>`;
+}
+
+// ===== タイトル操作 =====
+function showAddTitle() { document.getElementById('add-title-form').style.display='block'; }
+function hideAddTitle() { document.getElementById('add-title-form').style.display='none'; document.getElementById('new-title-input').value=''; }
+
+async function saveTitle() {
+  const val = document.getElementById('new-title-input').value.trim();
+  if (!val) return;
+  if (titles.includes(val)) { alert('すでに登録されています'); return; }
+  await dbPut('titles', {id: Date.now(), name: val});
+  await reloadAll();
+  hideAddTitle();
+  renderRegPage();
+}
+
+async function deleteTitle(idx) {
+  if (!confirm('このタイトルを削除しますか？')) return;
+  const ts = await dbGetAll('titles');
+  const target = ts[idx];
+  if (target) { await dbDelete('titles', target.id); }
+  await reloadAll();
+  renderRegPage();
+}
+
+// ===== 公演登録・削除 =====
+async function addPerformance() {
+  const title = document.getElementById('reg-title').value;
+  const tid = document.getElementById('reg-theater').value;
+  const dt = document.getElementById('reg-datetime').value;
+  const rowLabel = document.getElementById('reg-row').value;
+  const seatNum = document.getElementById('reg-num').value;
+  const count = parseInt(document.getElementById('reg-count').value)||1;
+  const type = document.querySelector('input[name="ttype"]:checked')?.value || 'self';
+  const memo = document.getElementById('reg-memo').value;
+
+  if (!tid || !dt || !rowLabel || !seatNum) { alert('劇場・日時・列・番号は必須です'); return; }
+
+  await dbPut('performances', {
+    id: 'p'+Date.now(), title, theaterId: tid, datetime: dt,
+    rowLabel, seatNum, count, type, memo
+  });
+  await reloadAll();
+  renderRegPage();
+  alert('登録しました！');
+}
+
+async function deletePerf(id) {
+  if (!confirm('この公演を削除しますか？')) return;
+  await dbDelete('performances', id);
+  await reloadAll();
+  renderRegPage();
+}
+
+// ===== 劇場登録 =====
+let pendingImgDataUrl = null;
+
+function previewImg(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    pendingImgDataUrl = e.target.result;
+    const prev = document.getElementById('img-preview');
+    prev.src = pendingImgDataUrl; prev.style.display='block';
+    document.getElementById('img-label').textContent = '✓ '+file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function addTheater() {
+  const name = document.getElementById('th-name').value.trim();
+  const place = document.getElementById('th-place').value.trim();
+  const address = document.getElementById('th-address').value.trim();
+  if (!name) { alert('劇場名を入力してください'); return; }
+  if (theaters.find(t => t.name===name)) { alert('同名の劇場がすでに登録されています'); return; }
+
+  const id = 't'+Date.now();
+  await dbPut('theaters', {id, name, place, address});
+  if (pendingImgDataUrl) {
+    await dbPut('images', {theaterId: id, dataUrl: pendingImgDataUrl});
+  }
+  await reloadAll();
+  pendingImgDataUrl = null;
+  renderRegPage();
+  alert(`「${name}」を登録しました！`);
+}
+
+// ===== Excel出力（CSV） =====
+function exportExcel() {
+  if (!performances.length) { alert('登録されている公演がありません'); return; }
+  const BOM = '\uFEFF';
+  const headers = ['公演タイトル','劇場名','場所','住所','公演日時','列','番号','枚数','種別','メモ'];
+  const rows = [...performances]
+    .sort((a,b) => new Date(a.datetime)-new Date(b.datetime))
+    .map(p => {
+      const th = getTheater(p.theaterId);
+      return [
+        p.title||'', th.name||'', th.place||'', th.address||'',
+        fmtDt(p.datetime), p.rowLabel||'', p.seatNum||'',
+        p.count, typeLabel(p.type), (p.memo||'').replace(/\n/g,' ')
+      ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
+    });
+  const csv = BOM + [headers.join(','), ...rows].join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '観劇記録.csv';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// =============================================
+// 起動
+// =============================================
+initApp().catch(err => {
+  document.getElementById('pane0').innerHTML =
+    `<div class="empty">初期化エラー: ${err.message}</div>`;
+});
+</script>
+</body>
+</html>
