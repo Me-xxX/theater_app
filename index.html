@@ -417,35 +417,28 @@ async function saveEdit(){
 
 // =============================================
 // 座席位置計算（銀河劇場）
+// ブロックごとに独立してX座標を計算（通路ずれ対策）
 // =============================================
-const GINGA={
-  rows:[
-    {name:'A',start:5,end:32},{name:'B',start:3,end:34},{name:'C',start:2,end:35},
-    {name:'D',start:1,end:36},{name:'E',start:1,end:36},{name:'F',start:1,end:36},
-    {name:'G',start:1,end:36},{name:'H',start:1,end:36},{name:'I',start:1,end:36},
-    {name:'J',start:2,end:35},{name:'K',start:2,end:35},{name:'L',start:3,end:34},
-    {name:'M',start:4,end:33},{name:'N',start:6,end:31},{name:'O',start:8,end:29},
-    {name:'P',start:10,end:27},{name:'Q',start:13,end:24},
-  ],
-  topPct:11,bottomPct:92,leftPct:8,rightPct:92,
-  aisleAfter12:1.8,aisleAfter24:1.8,
+const GINGA_ROWS=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'];
+const GINGA_X={
+  L:{start:10.2,end:32.5,seatFrom:1, seatTo:12},
+  M:{start:36.0,end:58.5,seatFrom:13,seatTo:24},
+  R:{start:62.0,end:84.5,seatFrom:25,seatTo:36},
 };
+const GINGA_Y={top:14.5,bottom:87.5};
 function calcSeatPos(theaterId,rowLabel,seatNum){
   if(theaterId!=='t_ginga')return null;
-  const L=GINGA;
-  const rowIdx=L.rows.findIndex(r=>r.name===rowLabel);
+  const rowIdx=GINGA_ROWS.indexOf(rowLabel);
   if(rowIdx<0)return null;
   const num=parseInt(seatNum);
-  const yPct=L.topPct+(rowIdx/(L.rows.length-1))*(L.bottomPct-L.topPct);
-  const baseRow=L.rows.find(r=>r.name==='D');
-  const totalSeats=baseRow.end;
-  let aisle=0;
-  if(num>=13)aisle+=L.aisleAfter12;
-  if(num>=25)aisle+=L.aisleAfter24;
-  const xPct=L.leftPct+((num-1)/(totalSeats-1))*(L.rightPct-L.leftPct)+aisle;
+  const yPct=GINGA_Y.top+rowIdx*(GINGA_Y.bottom-GINGA_Y.top)/(GINGA_ROWS.length-1);
+  let block;
+  if(num<=12)block=GINGA_X.L;
+  else if(num<=24)block=GINGA_X.M;
+  else block=GINGA_X.R;
+  const xPct=block.start+(num-block.seatFrom)/(block.seatTo-block.seatFrom)*(block.end-block.start);
   return{x:xPct,y:yPct};
 }
-
 // =============================================
 // 座席モーダル（ピンチズーム対応）
 // =============================================
