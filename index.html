@@ -88,9 +88,9 @@ textarea{resize:vertical;min-height:56px}
 .pinch-container{position:relative;overflow:hidden;width:92vw;max-height:80vh;display:flex;align-items:center;justify-content:center;border-radius:var(--radius)}
 #modal-inner{position:relative;transform-origin:center center;will-change:transform;display:inline-block;line-height:0}
 #modal-img{display:block;max-width:92vw;max-height:80vh;border-radius:var(--radius);pointer-events:none;user-select:none}
-.modal-dot{position:absolute;transform:translate(-50%,-100%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:2px}
-.modal-dot .dot{width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5)}
-.modal-dot .dot-label{background:rgba(0,0,0,.65);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;white-space:nowrap;max-width:60px;overflow:hidden;text-overflow:ellipsis}
+.modal-dot{position:absolute;transform:translate(-50%,-100%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.modal-dot .dot{width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.6);flex-shrink:0}
+.modal-dot .dot-label{background:rgba(20,20,20,.85);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap;letter-spacing:.3px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .modal-hint{color:rgba(255,255,255,.7);font-size:11px;margin-top:8px;letter-spacing:.3px}
 /* 編集モーダル */
 .edit-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-end;justify-content:center}
@@ -586,7 +586,7 @@ function renderSeatView(){
     detail+='<div class="seat-container">';
     if(img){
       detail+=`<img class="seat-img" src="${img}" alt="座席表" onclick="openImgModal('${selectedTheater}')">`;
-      perfs.forEach(p=>{
+      perfs.filter(p=>!isPast(p.datetime)).forEach(p=>{
         const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
         if(pos){
           detail+=`<div class="seat-marker" style="left:${pos.x}%;top:${pos.y}%"></div>`;
