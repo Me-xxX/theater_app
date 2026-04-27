@@ -420,18 +420,20 @@ async function saveEdit(){
 // ブロックごとに独立してX座標を計算（通路ずれ対策）
 // =============================================
 const GINGA_ROWS=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'];
+// 画像を直接ピクセル計測した実測値
 const GINGA_X={
-  L:{start:10.2,end:32.5,seatFrom:1, seatTo:12},
-  M:{start:36.0,end:58.5,seatFrom:13,seatTo:24},
-  R:{start:62.0,end:84.5,seatFrom:25,seatTo:36},
+  L:{start:9.5, end:34.0, seatFrom:1,  seatTo:12}, // 青ブロック 1〜12番
+  M:{start:38.0,end:63.0, seatFrom:13, seatTo:24}, // 緑ブロック 13〜24番
+  R:{start:67.5,end:92.0, seatFrom:25, seatTo:36}, // 紫ブロック 25〜36番
 };
-const GINGA_Y={top:14.5,bottom:87.5};
+// 各行Y座標（実測値・等間隔64px/1329px≒4.8%）
+const GINGA_ROW_Y=[16.0,20.8,25.6,30.4,35.2,40.0,44.8,49.7,54.5,59.3,64.1,68.9,73.7,78.6,83.4,88.2,93.0];
 function calcSeatPos(theaterId,rowLabel,seatNum){
   if(theaterId!=='t_ginga')return null;
   const rowIdx=GINGA_ROWS.indexOf(rowLabel);
   if(rowIdx<0)return null;
   const num=parseInt(seatNum);
-  const yPct=GINGA_Y.top+rowIdx*(GINGA_Y.bottom-GINGA_Y.top)/(GINGA_ROWS.length-1);
+  const yPct=GINGA_ROW_Y[rowIdx];
   let block;
   if(num<=12)block=GINGA_X.L;
   else if(num<=24)block=GINGA_X.M;
