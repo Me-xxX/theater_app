@@ -90,6 +90,7 @@ textarea{resize:vertical;min-height:56px}
 #modal-img{display:block;max-width:92vw;max-height:80vh;border-radius:var(--radius);pointer-events:none;user-select:none}
 .modal-dot{position:absolute;transform:translate(-50%,-100%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
 .modal-dot .dot{width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.6);flex-shrink:0}
+.modal-dot .dot.blue{background:var(--blue)}
 .modal-dot .dot-label{background:rgba(20,20,20,.85);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap;letter-spacing:.3px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .modal-hint{color:rgba(255,255,255,.7);font-size:11px;margin-top:8px;letter-spacing:.3px}
 /* 編集モーダル */
@@ -177,7 +178,7 @@ const dbDelete=(s,k)=>new Promise((r,j)=>{const t=db.transaction(s,'readwrite');
 let theaters=[],performances=[],titles=[],images={};
 let showPast=false;
 // フィルタ状態
-let filterTitle='',filterTheater='',filterMonth='';
+let filterTitle='',filterTheater='',filterMonth='',filterType='';
 // 一括チェック状態
 let checkedIds=new Set();
 
@@ -253,6 +254,7 @@ function renderSchedule(){
     .filter(p=>!filterTitle||p.title===filterTitle)
     .filter(p=>!filterTheater||p.theaterId===filterTheater)
     .filter(p=>!filterMonth||fmtYM(p.datetime)===filterMonth)
+    .filter(p=>!filterType||p.type===filterType)
     .sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
 
   let html='';
@@ -260,7 +262,7 @@ function renderSchedule(){
   // ▼ 絞り込みフィルタ
   html+=`<div class="filter-box" style="margin-bottom:10px">
     <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px">🔍 絞り込み</div>
-    <div class="grid3">
+    <div class="grid2" style="margin-bottom:6px">
       <div>
         <select style="font-size:12px;padding:6px 8px" onchange="filterTitle=this.value;renderSchedule()">
           <option value="">公演名</option>
@@ -273,14 +275,24 @@ function renderSchedule(){
           ${allTheaters.map(id=>{const th=getTheater(id);return `<option value="${id}" ${filterTheater===id?'selected':''}>${th.name}</option>`;}).join('')}
         </select>
       </div>
+    </div>
+    <div class="grid2">
       <div>
         <select style="font-size:12px;padding:6px 8px" onchange="filterMonth=this.value;renderSchedule()">
           <option value="">月</option>
           ${allMonths.map(m=>`<option value="${m}" ${filterMonth===m?'selected':''}>${m}</option>`).join('')}
         </select>
       </div>
+      <div>
+        <select style="font-size:12px;padding:6px 8px" onchange="filterType=this.value;renderSchedule()">
+          <option value="">種別</option>
+          <option value="self" ${filterType==='self'?'selected':''}>自分用</option>
+          <option value="companion" ${filterType==='companion'?'selected':''}>連番用</option>
+          <option value="duplicate" ${filterType==='duplicate'?'selected':''}>重複分</option>
+        </select>
+      </div>
     </div>
-    ${(filterTitle||filterTheater||filterMonth)?`<button class="btn xs" style="margin-top:8px;color:var(--text2)" onclick="filterTitle='';filterTheater='';filterMonth='';renderSchedule()">✕ フィルタをクリア</button>`:''}
+    ${(filterTitle||filterTheater||filterMonth||filterType)?`<button class="btn xs" style="margin-top:8px;color:var(--text2)" onclick="filterTitle='';filterTheater='';filterMonth='';filterType='';renderSchedule()">✕ フィルタをクリア</button>`:''}
   </div>`;
 
   // ▼ 表示オプション（終了・非表示）
@@ -446,18 +458,20 @@ function calcSeatPos(theaterId,rowLabel,seatNum){
 // =============================================
 let pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};
 
-function openSingleSeatModal(theaterId,rowLabel,seatNum){
+function openSingleSeatModal(theaterId,rowLabel,seatNum,perfId){
   const img=images[theaterId];if(!img)return;
   document.getElementById('modal-img').src=img;
   const dots=document.getElementById('modal-dots');
   dots.innerHTML='';
   const pos=calcSeatPos(theaterId,rowLabel,seatNum);
   if(pos){
+    const p=performances.find(x=>x.id===perfId)||{};
+    const isBlue=(p.type==='companion'||p.type==='duplicate');
     const dot=document.createElement('div');
     dot.className='modal-dot';
     dot.style.left=pos.x+'%';
     dot.style.top=pos.y+'%';
-    dot.innerHTML=`<div class="dot"></div>`;
+    dot.innerHTML=`<div class="dot${isBlue?' blue':''}"></div>`;
     dots.appendChild(dot);
   }
   document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
@@ -486,7 +500,8 @@ function openBulkSeatModal(){
       dot.style.left=pos.x+'%';
       dot.style.top=pos.y+'%';
       const dateStr=fmtDate(p.datetime);
-      dot.innerHTML=`<div class="dot-label">${dateStr}</div><div class="dot"></div>`;
+      const isBlue=(p.type==='companion'||p.type==='duplicate');
+      dot.innerHTML=`<div class="dot-label">${dateStr}</div><div class="dot${isBlue?' blue':''}"></div>`;
       dots.appendChild(dot);
     }
   });
