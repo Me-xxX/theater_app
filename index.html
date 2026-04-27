@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>観劇管理</title>
-<!-- iPhoneホーム画面アイコン -->
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -16,34 +15,23 @@
   --border:#d4c8b8;--border2:#c0b09a;
   --text:#3a2e22;--text2:#6a5a48;--text3:#9a8a78;
   --accent:#c97060;--accent2:#e8907a;
-  --blue:#6090c0;--green:#60a060;
-  --red:#d04040;
+  --blue:#6090c0;--red:#d04040;
   --radius:10px;--radius-sm:6px;
   --shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 body{font-family:"Hiragino Kaku Gothic Pro","Meiryo",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .app{max-width:440px;margin:0 auto;padding-bottom:80px}
-
-/* タブバー */
 .tab-bar{display:flex;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
 .tab{flex:1;padding:12px 2px;font-size:11px;font-weight:600;text-align:center;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;letter-spacing:.3px}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .pane{display:none;padding:16px}
 .pane.active{display:block}
-
-/* セクション */
 .section-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;letter-spacing:.5px}
-.subsection{font-size:11px;font-weight:700;color:var(--text3);margin:14px 0 6px;letter-spacing:.8px;text-transform:uppercase}
-
-/* カード基本 */
+.subsection{font-size:11px;font-weight:700;color:var(--text3);margin:14px 0 6px;letter-spacing:.8px}
 .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:13px;margin-bottom:10px;box-shadow:var(--shadow)}
-.card-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-
-/* 強調カード（今日・明日） */
 .card.today-card{border:2px solid #e06050;background:#fffaf9;box-shadow:0 3px 12px rgba(192,64,48,.15)}
 .card.tomorrow-card{border:1.5px solid #d4a840;background:#fffdf5;box-shadow:0 2px 8px rgba(180,130,0,.1)}
-
-/* バッジ */
+.card-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
 .badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px}
 .badge.today{background:#fde0d8;color:#b83020}
 .badge.tomorrow{background:#fef0c8;color:#9a6810}
@@ -51,16 +39,13 @@ body{font-family:"Hiragino Kaku Gothic Pro","Meiryo",sans-serif;background:var(-
 .badge.companion{background:#e0f0e0;color:#408040}
 .badge.duplicate{background:#e8e0f0;color:#6040a0}
 .badge.past{background:#e8e8e8;color:#888}
-.badge.hidden{background:#f0e8f8;color:#804898}
-
-/* フォーム */
+.badge.hidden-b{background:#f0e8f8;color:#804898}
 label.field{display:block;font-size:11px;font-weight:600;color:var(--text2);margin:10px 0 4px;letter-spacing:.3px}
 input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;color:var(--text);background:#fff;transition:border .2s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
-textarea{resize:vertical;min-height:60px}
+textarea{resize:vertical;min-height:56px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-
-/* ボタン */
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .btn{display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;color:var(--text);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;text-align:center;margin-top:10px;transition:all .2s}
 .btn:hover{background:var(--bg2)}
 .btn.primary{background:var(--accent);color:#fff;border:none}
@@ -68,65 +53,50 @@ textarea{resize:vertical;min-height:60px}
 .btn.sm{padding:5px 11px;font-size:12px;width:auto;margin-top:0}
 .btn.xs{padding:3px 8px;font-size:11px;width:auto;margin-top:0}
 .btn.danger{color:var(--red);border-color:#f0c0c0;background:#fff8f8}
-.btn.warn{color:#a06000;border-color:#e8d090;background:#fffdf0}
 .btn.excel{background:#1d6f42;color:#fff;border:none}
 .btn.excel:hover{background:#2a8a52}
-.btn.seat-btn{background:#6090c0;color:#fff;border:none;font-size:12px;padding:7px}
-.btn.seat-btn:hover{background:#4878b0}
-
+.btn.seat-btn{background:var(--blue);color:#fff;border:none;font-size:12px;padding:7px}
+.btn.bulk-btn{background:#8060b0;color:#fff;border:none;font-size:12px;padding:8px}
 .row-flex{display:flex;align-items:center;gap:8px}
 .divider{height:1px;background:var(--border);margin:14px 0}
-
-/* チップ */
 .chips-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
 .chip{display:inline-flex;align-items:center;padding:5px 11px;border:1px solid var(--border);border-radius:999px;font-size:12px;cursor:pointer;background:#fff;color:var(--text2);transition:all .2s}
 .chip.selected{background:var(--text);color:#fff;border-color:var(--text)}
-
-/* ラジオ */
 .check-group{display:flex;gap:14px;flex-wrap:wrap;padding:6px 0}
 .check-item{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px}
 .check-item input[type=radio]{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
-
 /* 座席コンテナ */
-.seat-container{position:relative;width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--bg2);min-height:160px}
+.seat-container{position:relative;width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--bg2);min-height:150px}
 .seat-img{width:100%;display:block;cursor:zoom-in}
-.seat-marker{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4);z-index:5;pointer-events:none}
-.seat-marker.self-mark{background:var(--red);width:26px;height:26px}
-.seat-marker.other-mark{background:var(--blue);width:20px;height:20px;opacity:.8}
-.seat-placeholder{display:flex;align-items:center;justify-content:center;min-height:160px;color:var(--text3);font-size:13px;flex-direction:column;gap:8px;padding:20px}
-
-/* 情報行 */
+.seat-marker{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);z-index:5;pointer-events:none;background:var(--red);width:10px;height:10px}
 .info-row{display:flex;gap:6px;font-size:13px;margin:3px 0;align-items:flex-start}
 .info-label{font-size:11px;font-weight:600;color:var(--text3);min-width:54px;padding-top:1px}
-
-/* 削除ボタン */
 .del-btn{font-size:11px;color:var(--red);cursor:pointer;background:none;border:none;padding:2px 5px;font-family:inherit;flex-shrink:0}
 .hide-btn{font-size:11px;color:#804898;cursor:pointer;background:none;border:none;padding:2px 5px;font-family:inherit;flex-shrink:0}
-
-/* アップロード */
+.edit-btn{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:none;padding:2px 5px;font-family:inherit;flex-shrink:0}
 .upload-area{border:1.5px dashed var(--border2);border-radius:var(--radius);padding:13px;text-align:center;font-size:13px;color:var(--text3);cursor:pointer;transition:all .2s}
 .upload-area:hover{background:var(--bg2);border-color:var(--accent)}
-
-/* 終了/非表示フィルタバー */
-.filter-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px}
-.filter-bar summary{cursor:pointer;color:var(--text2);font-weight:600;list-style:none;display:flex;align-items:center;gap:6px}
-.filter-bar summary::before{content:'▶';font-size:10px;transition:transform .2s}
-details[open] .filter-bar summary::before{transform:rotate(90deg)}
-.filter-bar .hidden-list{margin-top:10px;display:flex;flex-direction:column;gap:6px}
-
-/* モーダル（拡大表示・座席確認） */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:1000;align-items:center;justify-content:center;flex-direction:column}
-.modal-overlay.open{display:flex}
-.modal-img-wrap{position:relative;max-width:96vw;max-height:85vh;overflow:auto;border-radius:var(--radius)}
-.modal-img-wrap img{display:block;max-width:90vw;border-radius:var(--radius)}
-.modal-close{position:fixed;top:14px;right:16px;background:rgba(255,255,255,.18);border:none;color:#fff;font-size:22px;cursor:pointer;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;z-index:1001}
-.modal-marker{position:absolute;transform:translate(-50%,-50%);background:var(--red);border-radius:50%;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.5);pointer-events:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-.modal-label{color:#fff;font-size:13px;margin-top:10px;background:rgba(0,0,0,.5);padding:6px 14px;border-radius:999px}
-
-/* 空・ローディング */
 .empty{text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px}
 .loading{text-align:center;padding:2rem;color:var(--text3);font-size:13px}
-
+/* フィルタ */
+.filter-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px}
+/* モーダル（拡大・座席確認） */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;flex-direction:column;align-items:center;justify-content:center;touch-action:none}
+.modal-overlay.open{display:flex}
+.modal-close{position:fixed;top:14px;right:16px;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:22px;cursor:pointer;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;z-index:1002;touch-action:manipulation}
+/* ピンチズーム対応コンテナ */
+.pinch-container{position:relative;overflow:hidden;width:92vw;max-height:80vh;display:flex;align-items:center;justify-content:center;border-radius:var(--radius)}
+#modal-inner{position:relative;transform-origin:center center;will-change:transform;display:inline-block;line-height:0}
+#modal-img{display:block;max-width:92vw;max-height:80vh;border-radius:var(--radius);pointer-events:none;user-select:none}
+.modal-dot{position:absolute;transform:translate(-50%,-100%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:2px}
+.modal-dot .dot{width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5)}
+.modal-dot .dot-label{background:rgba(0,0,0,.65);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;white-space:nowrap;max-width:60px;overflow:hidden;text-overflow:ellipsis}
+.modal-hint{color:rgba(255,255,255,.7);font-size:11px;margin-top:8px;letter-spacing:.3px}
+/* 編集モーダル */
+.edit-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-end;justify-content:center}
+.edit-modal.open{display:flex}
+.edit-sheet{background:var(--bg);border-radius:16px 16px 0 0;width:100%;max-width:440px;padding:20px 16px 36px;max-height:90vh;overflow-y:auto}
+.edit-sheet-title{font-size:15px;font-weight:700;margin-bottom:14px;text-align:center}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 </style>
@@ -143,25 +113,35 @@ details[open] .filter-bar summary::before{transform:rotate(90deg)}
   <div class="pane" id="pane2"><div class="loading">読み込み中...</div></div>
 </div>
 
-<!-- 座席拡大・座席位置モーダル -->
-<div class="modal-overlay" id="seat-modal" onclick="closeModal(event)">
+<!-- 座席拡大・一括座席確認モーダル -->
+<div class="modal-overlay" id="seat-modal">
   <button class="modal-close" onclick="closeSeatModal()">✕</button>
-  <div class="modal-img-wrap" id="modal-img-wrap">
-    <img id="modal-img" src="" alt="座席表拡大">
-    <div class="modal-marker" id="modal-marker" style="display:none"></div>
+  <div class="pinch-container" id="pinch-container">
+    <div id="modal-inner">
+      <img id="modal-img" src="" alt="座席表">
+      <div id="modal-dots"></div>
+    </div>
   </div>
-  <div class="modal-label" id="modal-label" style="display:none"></div>
+  <div class="modal-hint" id="modal-hint">ピンチで拡大 / 2本指でスクロール</div>
+</div>
+
+<!-- 編集シート -->
+<div class="edit-modal" id="edit-modal">
+  <div class="edit-sheet" id="edit-sheet">
+    <div class="edit-sheet-title">公演を編集</div>
+    <div id="edit-form-body"></div>
+    <button class="btn primary" style="margin-top:14px" onclick="saveEdit()">保存する</button>
+    <button class="btn" style="margin-top:8px" onclick="closeEditModal()">キャンセル</button>
+  </div>
 </div>
 
 <script>
 // =============================================
 // IndexedDB
 // =============================================
-const DB_NAME = 'TheaterAppDB';
-const DB_VERSION = 2; // バージョンアップでhidden/pastフィールド対応
-let db = null;
-
-const DEFAULT_THEATERS = [
+const DB_NAME='TheaterAppDB', DB_VERSION=2;
+let db=null;
+const DEFAULT_THEATERS=[
   {id:'t_ginga',   name:'天王洲アイル 銀河劇場',      place:'東京・天王洲アイル', address:'〒140-0002 東京都品川区東品川2-1-3'},
   {id:'t_stella',  name:'品川プリンス ステラボール',    place:'東京・品川',        address:'〒108-8611 東京都港区高輪4-10-30 品川プリンスホテル内'},
   {id:'t_hika',    name:'シアターH',                  place:'東京・大井町',      address:'〒140-0012 東京都品川区勝島1-6-29'},
@@ -173,213 +153,273 @@ const DEFAULT_THEATERS = [
   {id:'t_sanmall', name:'シアターサンモール',           place:'東京・新宿',        address:'〒160-0022 東京都新宿区新宿3-14-20 サンモールビルB2F'},
   {id:'t_zero',    name:'全労災ホール スペース・ゼロ',  place:'東京・新宿',        address:'〒151-0053 東京都渋谷区代々木2-12-10'},
 ];
-
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = e => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains('theaters'))    d.createObjectStore('theaters',    {keyPath:'id'});
-      if (!d.objectStoreNames.contains('performances')){
-        const ps = d.createObjectStore('performances', {keyPath:'id'});
-        ps.createIndex('datetime','datetime',{unique:false});
-      }
-      if (!d.objectStoreNames.contains('titles'))      d.createObjectStore('titles',      {keyPath:'id',autoIncrement:true});
-      if (!d.objectStoreNames.contains('images'))      d.createObjectStore('images',      {keyPath:'theaterId'});
+function openDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains('theaters'))    d.createObjectStore('theaters',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('performances')){const ps=d.createObjectStore('performances',{keyPath:'id'});ps.createIndex('datetime','datetime',{unique:false});}
+      if(!d.objectStoreNames.contains('titles'))      d.createObjectStore('titles',{keyPath:'id',autoIncrement:true});
+      if(!d.objectStoreNames.contains('images'))      d.createObjectStore('images',{keyPath:'theaterId'});
     };
-    req.onsuccess = e => resolve(e.target.result);
-    req.onerror   = e => reject(e.target.error);
+    req.onsuccess=e=>res(e.target.result);
+    req.onerror=e=>rej(e.target.error);
   });
 }
-const dbGetAll = (s)      => new Promise((res,rej)=>{ const t=db.transaction(s,'readonly'); const r=t.objectStore(s).getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); });
-const dbPut    = (s,o)    => new Promise((res,rej)=>{ const t=db.transaction(s,'readwrite'); const r=t.objectStore(s).put(o); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); });
-const dbDelete = (s,k)    => new Promise((res,rej)=>{ const t=db.transaction(s,'readwrite'); const r=t.objectStore(s).delete(k); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error); });
-const dbGet    = (s,k)    => new Promise((res,rej)=>{ const t=db.transaction(s,'readonly');  const r=t.objectStore(s).get(k);    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); });
+const dbGetAll=(s)=>new Promise((r,j)=>{const t=db.transaction(s,'readonly');const q=t.objectStore(s).getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error);});
+const dbPut=(s,o)=>new Promise((r,j)=>{const t=db.transaction(s,'readwrite');const q=t.objectStore(s).put(o);q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error);});
+const dbDelete=(s,k)=>new Promise((r,j)=>{const t=db.transaction(s,'readwrite');const q=t.objectStore(s).delete(k);q.onsuccess=()=>r();q.onerror=()=>j(q.error);});
 
 // =============================================
 // 状態
 // =============================================
-let theaters=[], performances=[], titles=[], images={};
-let showPast = false; // 終了公演表示フラグ
+let theaters=[],performances=[],titles=[],images={};
+let showPast=false;
+// フィルタ状態
+let filterTitle='',filterTheater='',filterMonth='';
+// 一括チェック状態
+let checkedIds=new Set();
 
-async function initApp() {
-  db = await openDB();
-  const existing = await dbGetAll('theaters');
-  if (existing.length === 0) {
-    for (const t of DEFAULT_THEATERS) await dbPut('theaters', t);
-  } else {
-    const ids = existing.map(t=>t.id);
-    for (const t of DEFAULT_THEATERS) if (!ids.includes(t.id)) await dbPut('theaters', t);
-    // シアターH住所修正
-    const h = existing.find(t=>t.id==='t_hika');
-    if (h && h.place !== '東京・大井町') { h.place='東京・大井町'; h.address='〒140-0012 東京都品川区勝島1-6-29'; await dbPut('theaters',h); }
+async function initApp(){
+  db=await openDB();
+  const ex=await dbGetAll('theaters');
+  if(ex.length===0){for(const t of DEFAULT_THEATERS)await dbPut('theaters',t);}
+  else{
+    const ids=ex.map(t=>t.id);
+    for(const t of DEFAULT_THEATERS)if(!ids.includes(t.id))await dbPut('theaters',t);
+    const h=ex.find(t=>t.id==='t_hika');
+    if(h&&h.place!=='東京・大井町'){h.place='東京・大井町';h.address='〒140-0012 東京都品川区勝島1-6-29';await dbPut('theaters',h);}
   }
-  const ts = await dbGetAll('titles');
-  if (ts.length===0) await dbPut('titles',{id:1,name:'スキップとローファー ミュージカル'});
+  const ts=await dbGetAll('titles');
+  if(ts.length===0)await dbPut('titles',{id:1,name:'スキップとローファー ミュージカル'});
   await reloadAll();
   renderCurrentTab();
 }
-
-async function reloadAll() {
-  theaters     = await dbGetAll('theaters');
-  performances = await dbGetAll('performances');
-  const ts     = await dbGetAll('titles');
-  titles       = ts.map(t=>t.name);
-  const imgs   = await dbGetAll('images');
-  images = {};
-  imgs.forEach(i=>{ images[i.theaterId]=i.dataUrl; });
+async function reloadAll(){
+  theaters=await dbGetAll('theaters');
+  performances=await dbGetAll('performances');
+  const ts=await dbGetAll('titles');titles=ts.map(t=>t.name);
+  const imgs=await dbGetAll('images');images={};imgs.forEach(i=>{images[i.theaterId]=i.dataUrl;});
 }
 
 // =============================================
 // ユーティリティ
 // =============================================
-function fmtDt(iso) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  const days = ['日','月','火','水','木','金','土'];
-  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-}
-function todayStart() { const d=new Date(); d.setHours(0,0,0,0); return d; }
-function tomorrowStart() { const d=todayStart(); d.setDate(d.getDate()+1); return d; }
-function dayAfterStart() { const d=todayStart(); d.setDate(d.getDate()+2); return d; }
-function isToday(iso)    { const d=new Date(iso); return d>=todayStart()&&d<tomorrowStart(); }
-function isTomorrow(iso) { const d=new Date(iso); return d>=tomorrowStart()&&d<dayAfterStart(); }
-function isPast(iso)     { return new Date(iso) < todayStart(); }
-function getTheater(id)  { return theaters.find(t=>t.id===id)||{}; }
-function typeLabel(type) { return {self:'自分用',companion:'連番用',duplicate:'重複分'}[type]||type; }
-function typeBadge(type) { return `<span class="badge ${type}">${typeLabel(type)}</span>`; }
+function fmtDt(iso){if(!iso)return '';const d=new Date(iso);const days=['日','月','火','水','木','金','土'];return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function fmtDate(iso){if(!iso)return '';const d=new Date(iso);return `${d.getMonth()+1}/${d.getDate()}`;}
+function fmtYM(iso){if(!iso)return '';const d=new Date(iso);return `${d.getFullYear()}年${d.getMonth()+1}月`;}
+function todayStart(){const d=new Date();d.setHours(0,0,0,0);return d;}
+function tomorrowStart(){const d=todayStart();d.setDate(d.getDate()+1);return d;}
+function dayAfterStart(){const d=todayStart();d.setDate(d.getDate()+2);return d;}
+function isToday(iso){const d=new Date(iso);return d>=todayStart()&&d<tomorrowStart();}
+function isTomorrow(iso){const d=new Date(iso);return d>=tomorrowStart()&&d<dayAfterStart();}
+function isPast(iso){return new Date(iso)<todayStart();}
+function getTheater(id){return theaters.find(t=>t.id===id)||{};}
+function typeLabel(t){return {self:'自分用',companion:'連番用',duplicate:'重複分'}[t]||t;}
+function typeBadge(t){return `<span class="badge ${t}">${typeLabel(t)}</span>`;}
 
 // =============================================
-// タブ管理
+// タブ
 // =============================================
-let currentTab = 0;
-function switchTab(i) {
+let currentTab=0;
+function switchTab(i){
   currentTab=i;
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
   document.querySelectorAll('.pane').forEach((p,j)=>p.classList.toggle('active',i===j));
   renderCurrentTab();
 }
-function renderCurrentTab() {
-  if (currentTab===0) renderSchedule();
-  if (currentTab===1) renderSeatView();
-  if (currentTab===2) renderRegPage();
+function renderCurrentTab(){
+  if(currentTab===0)renderSchedule();
+  if(currentTab===1)renderSeatView();
+  if(currentTab===2)renderRegPage();
 }
 
 // =============================================
 // TAB1: 観劇予定
 // =============================================
-function renderSchedule() {
-  const el = document.getElementById('pane0');
+function renderSchedule(){
+  const el=document.getElementById('pane0');
+  const hiddenPerfs=performances.filter(p=>p.hidden);
 
-  // 非表示一覧
-  const hiddenPerfs = performances.filter(p=>p.hidden);
+  // 絞り込み用の選択肢
+  const allTitles=[...new Set(performances.map(p=>p.title).filter(Boolean))];
+  const allTheaters=[...new Set(performances.map(p=>p.theaterId))];
+  const allMonths=[...new Set(performances.map(p=>fmtYM(p.datetime)).filter(Boolean))].sort();
 
-  // 表示対象: 過去は showPast で制御、非表示は専用セクションで管理
-  let visible = performances
-    .filter(p => !p.hidden)
-    .filter(p => showPast || !isPast(p.datetime))
+  let visible=performances
+    .filter(p=>!p.hidden)
+    .filter(p=>showPast||!isPast(p.datetime))
+    .filter(p=>!filterTitle||p.title===filterTitle)
+    .filter(p=>!filterTheater||p.theaterId===filterTheater)
+    .filter(p=>!filterMonth||fmtYM(p.datetime)===filterMonth)
     .sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
 
-  let html = '';
+  let html='';
 
-  // フィルタバー
-  html += `<details style="margin-bottom:12px">
-    <summary class="filter-bar" style="display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;font-size:12px;font-weight:600;color:var(--text2)">
+  // ▼ 絞り込みフィルタ
+  html+=`<div class="filter-box" style="margin-bottom:10px">
+    <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px">🔍 絞り込み</div>
+    <div class="grid3">
+      <div>
+        <select style="font-size:12px;padding:6px 8px" onchange="filterTitle=this.value;renderSchedule()">
+          <option value="">公演名</option>
+          ${allTitles.map(t=>`<option value="${t}" ${filterTitle===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+      <div>
+        <select style="font-size:12px;padding:6px 8px" onchange="filterTheater=this.value;renderSchedule()">
+          <option value="">劇場</option>
+          ${allTheaters.map(id=>{const th=getTheater(id);return `<option value="${id}" ${filterTheater===id?'selected':''}>${th.name}</option>`;}).join('')}
+        </select>
+      </div>
+      <div>
+        <select style="font-size:12px;padding:6px 8px" onchange="filterMonth=this.value;renderSchedule()">
+          <option value="">月</option>
+          ${allMonths.map(m=>`<option value="${m}" ${filterMonth===m?'selected':''}>${m}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    ${(filterTitle||filterTheater||filterMonth)?`<button class="btn xs" style="margin-top:8px;color:var(--text2)" onclick="filterTitle='';filterTheater='';filterMonth='';renderSchedule()">✕ フィルタをクリア</button>`:''}
+  </div>`;
+
+  // ▼ 表示オプション（終了・非表示）
+  html+=`<details style="margin-bottom:10px">
+    <summary style="list-style:none;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px">
       ⚙️ 表示オプション
     </summary>
     <div style="background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px">
       <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-bottom:8px">
-        <input type="checkbox" id="show-past-check" ${showPast?'checked':''} onchange="toggleShowPast()" style="width:16px;height:16px;accent-color:var(--accent)">
+        <input type="checkbox" ${showPast?'checked':''} onchange="showPast=this.checked;renderSchedule()" style="width:16px;height:16px;accent-color:var(--accent)">
         終了した公演を表示する
       </label>
-      ${hiddenPerfs.length ? `<div style="font-size:11px;font-weight:600;color:var(--text3);margin:8px 0 6px">非表示にした公演（タップで再表示）</div>
-        ${hiddenPerfs.map(p=>{
-          const th=getTheater(p.theaterId);
-          return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
-            <span style="font-size:12px;flex:1;color:var(--text2)">${th.name||'不明'} ${fmtDt(p.datetime)} ${p.rowLabel||''}列${p.seatNum||''}番</span>
-            <button class="btn xs" onclick="toggleHidePerf('${p.id}')">再表示</button>
-          </div>`;
-        }).join('')}` : '<div style="font-size:12px;color:var(--text3)">非表示の公演はありません</div>'}
+      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:6px">非表示の公演</div>
+      ${hiddenPerfs.length
+        ? hiddenPerfs.map(p=>{const th=getTheater(p.theaterId);return `<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;flex:1;color:var(--text2)">${th.name} ${fmtDate(p.datetime)} ${p.rowLabel||''}列${p.seatNum||''}番</span><button class="btn xs" onclick="toggleHidePerf('${p.id}')">再表示</button></div>`;}).join('')
+        : '<div style="font-size:12px;color:var(--text3)">なし</div>'}
     </div>
   </details>`;
 
-  if (!visible.length) {
-    html += '<div class="empty">表示できる公演がありません</div>';
-    el.innerHTML = html;
-    return;
+  // ▼ 一括座席確認パネル
+  const bulkable=visible.filter(p=>images[p.theaterId]);
+  if(bulkable.length>0){
+    html+=`<div class="filter-box" style="margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px">🗺️ 一括座席位置確認</div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <button class="btn xs" onclick="checkAllBulk(${JSON.stringify(bulkable.map(p=>p.id))})">全選択</button>
+        <button class="btn xs" onclick="checkedIds=new Set();renderSchedule()">全解除</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px">
+        ${bulkable.map(p=>{
+          const th=getTheater(p.theaterId);
+          return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
+            <input type="checkbox" ${checkedIds.has(p.id)?'checked':''} onchange="toggleCheck('${p.id}')" style="width:15px;height:15px;accent-color:#8060b0">
+            <span style="color:var(--text2)">${fmtDate(p.datetime)} ${th.name} ${p.rowLabel||''}列${p.seatNum||''}番</span>
+          </label>`;
+        }).join('')}
+      </div>
+      <button class="btn bulk-btn" onclick="openBulkSeatModal()">🎭 選択した座席を一括表示</button>
+    </div>`;
   }
 
-  visible.forEach(p => { html += buildScheduleCard(p); });
-  el.innerHTML = html;
+  if(!visible.length){
+    html+='<div class="empty">表示できる公演がありません</div>';
+    el.innerHTML=html; return;
+  }
+  visible.forEach(p=>{html+=buildScheduleCard(p);});
+  el.innerHTML=html;
 }
 
-function buildScheduleCard(p) {
-  const th = getTheater(p.theaterId);
-  const today  = isToday(p.datetime);
-  const tmrw   = isTomorrow(p.datetime);
-  const past   = isPast(p.datetime);
-  const cardCls = today ? 'card today-card' : tmrw ? 'card tomorrow-card' : 'card';
+function checkAllBulk(ids){ids.forEach(id=>checkedIds.add(id));renderSchedule();}
+function toggleCheck(id){if(checkedIds.has(id))checkedIds.delete(id);else checkedIds.add(id);renderSchedule();}
 
-  let whenBadge = '';
-  if (today) whenBadge = '<span class="badge today">今日</span>';
-  else if (tmrw) whenBadge = '<span class="badge tomorrow">明日</span>';
-  else if (past) whenBadge = '<span class="badge past">終了</span>';
-
-  // 今日カードは強調ヘッダ
-  const headerStyle = today
-    ? 'font-size:15px;font-weight:800;color:#b83020'
-    : tmrw ? 'font-size:14px;font-weight:700;color:#9a6810' : 'font-size:14px;font-weight:700';
-
-  // 座席確認ボタン（画像があれば有効）
-  const img = images[p.theaterId];
-  const seatBtnHtml = img
-    ? `<button class="btn seat-btn" style="margin-top:8px" onclick="openSeatModal('${p.theaterId}','${p.rowLabel||''}','${p.seatNum||''}','${p.id}')">🎭 座席位置を確認する</button>`
-    : `<button class="btn" style="margin-top:8px;font-size:12px;padding:7px;color:var(--text3)" disabled>🎭 座席表未登録</button>`;
+function buildScheduleCard(p){
+  const th=getTheater(p.theaterId);
+  const today=isToday(p.datetime),tmrw=isTomorrow(p.datetime),past=isPast(p.datetime);
+  const cardCls=today?'card today-card':tmrw?'card tomorrow-card':'card';
+  const whenBadge=today?'<span class="badge today">今日</span>':tmrw?'<span class="badge tomorrow">明日</span>':past?'<span class="badge past">終了</span>':'';
+  const hStyle=today?'font-size:15px;font-weight:800;color:#b83020':tmrw?'font-size:14px;font-weight:700;color:#9a6810':'font-size:14px;font-weight:700';
+  const img=images[p.theaterId];
+  const seatBtn=img
+    ?`<button class="btn seat-btn" style="margin-top:8px" onclick="openSingleSeatModal('${p.theaterId}','${p.rowLabel||''}','${p.seatNum||''}','${p.id}')">🎭 座席位置を確認する</button>`
+    :`<button class="btn" style="margin-top:8px;font-size:12px;padding:6px;color:var(--text3)" disabled>🎭 座席表未登録</button>`;
 
   return `<div class="${cardCls}">
     <div class="card-header">
-      ${today ? '<span class="badge today">今日</span>' : tmrw ? '<span class="badge tomorrow">明日</span>' : past ? '<span class="badge past">終了</span>' : ''}
-      ${typeBadge(p.type)}
-      <span style="${headerStyle}">${th.name||'不明'}</span>
-      <button class="hide-btn" onclick="toggleHidePerf('${p.id}')" title="非表示にする">🙈</button>
+      ${whenBadge}${typeBadge(p.type)}
+      <span style="${hStyle}">${th.name||'不明'}</span>
+      <button class="edit-btn" onclick="openEditModal('${p.id}')">✏️</button>
+      <button class="hide-btn" onclick="toggleHidePerf('${p.id}')" title="非表示">🙈</button>
     </div>
-    ${p.title?`<div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:6px">🎬 ${p.title}</div>`:''}
+    ${p.title?`<div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:5px">🎬 ${p.title}</div>`:''}
     <div class="info-row"><span class="info-label">日時</span>${fmtDt(p.datetime)}</div>
     <div class="info-row"><span class="info-label">場所</span>${th.place||'—'}</div>
     <div class="info-row"><span class="info-label">座席</span><strong>${p.rowLabel||''}列 ${p.seatNum||''}番</strong> × ${p.count}枚</div>
-    ${seatBtnHtml}
+    ${seatBtn}
     <div style="margin-top:8px">
       <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:3px">メモ</div>
-      <textarea style="width:100%;padding:7px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;background:#fff;resize:vertical;min-height:44px" onchange="saveMemo('${p.id}',this.value)">${p.memo||''}</textarea>
+      <textarea style="width:100%;padding:7px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;resize:vertical;min-height:44px" onchange="saveMemo('${p.id}',this.value)">${p.memo||''}</textarea>
     </div>
   </div>`;
 }
 
-function toggleShowPast() {
-  showPast = document.getElementById('show-past-check').checked;
-  renderSchedule();
-}
+async function saveMemo(id,val){const p=performances.find(x=>x.id===id);if(p){p.memo=val;await dbPut('performances',p);}}
+async function toggleHidePerf(id){const p=performances.find(x=>x.id===id);if(!p)return;p.hidden=!p.hidden;await dbPut('performances',p);await reloadAll();renderSchedule();}
+function toggleShowPast(){showPast=!showPast;renderSchedule();}
 
-async function toggleHidePerf(id) {
-  const p = performances.find(x=>x.id===id);
-  if (!p) return;
-  p.hidden = !p.hidden;
-  await dbPut('performances', p);
-  await reloadAll();
-  renderSchedule();
+// =============================================
+// 編集モーダル
+// =============================================
+let editingId=null;
+function openEditModal(id){
+  const p=performances.find(x=>x.id===id);if(!p)return;
+  editingId=id;
+  const titleOpts='<option value="">なし</option>'+titles.map(t=>`<option value="${t}"${p.title===t?' selected':''}>${t}</option>`).join('');
+  const theaterOpts=theaters.map(t=>`<option value="${t.id}"${p.theaterId===t.id?' selected':''}>${t.name}</option>`).join('');
+  const rowOpts=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}"${p.rowLabel===r?' selected':''}>${r}</option>`).join('');
+  document.getElementById('edit-form-body').innerHTML=`
+    <label class="field">公演タイトル</label>
+    <select id="e-title">${titleOpts}</select>
+    <label class="field">劇場</label>
+    <select id="e-theater">${theaterOpts}</select>
+    <label class="field">公演日時</label>
+    <input type="datetime-local" id="e-datetime" value="${p.datetime||''}">
+    <div class="grid2" style="margin-top:4px">
+      <div><label class="field">列</label><select id="e-row">${rowOpts}</select></div>
+      <div><label class="field">番号</label><input type="number" id="e-num" value="${p.seatNum||''}" min="1" max="40"></div>
+    </div>
+    <label class="field">枚数</label>
+    <input type="number" id="e-count" value="${p.count||1}" min="1" max="10">
+    <label class="field">チケット種別</label>
+    <div class="check-group">
+      <label class="check-item"><input type="radio" name="etype" value="self" ${p.type==='self'?'checked':''}> 自分用</label>
+      <label class="check-item"><input type="radio" name="etype" value="companion" ${p.type==='companion'?'checked':''}> 連番用</label>
+      <label class="check-item"><input type="radio" name="etype" value="duplicate" ${p.type==='duplicate'?'checked':''}> 重複分</label>
+    </div>
+    <label class="field">メモ</label>
+    <textarea id="e-memo">${p.memo||''}</textarea>`;
+  document.getElementById('edit-modal').classList.add('open');
 }
-
-async function saveMemo(id, val) {
-  const p = performances.find(x=>x.id===id);
-  if (p) { p.memo=val; await dbPut('performances',p); }
+function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');editingId=null;}
+async function saveEdit(){
+  if(!editingId)return;
+  const p=performances.find(x=>x.id===editingId);if(!p)return;
+  p.title=document.getElementById('e-title').value;
+  p.theaterId=document.getElementById('e-theater').value;
+  p.datetime=document.getElementById('e-datetime').value;
+  p.rowLabel=document.getElementById('e-row').value;
+  p.seatNum=document.getElementById('e-num').value;
+  p.count=parseInt(document.getElementById('e-count').value)||1;
+  p.type=document.querySelector('input[name="etype"]:checked')?.value||'self';
+  p.memo=document.getElementById('e-memo').value;
+  await dbPut('performances',p);await reloadAll();closeEditModal();renderSchedule();
 }
 
 // =============================================
-// 座席モーダル（拡大表示・座席位置表示）
+// 座席位置計算（銀河劇場）
 // =============================================
-// 銀河劇場の座席レイアウト定義（自動計算用）
-const GINGA_LAYOUT = {
-  rows: [
+const GINGA={
+  rows:[
     {name:'A',start:5,end:32},{name:'B',start:3,end:34},{name:'C',start:2,end:35},
     {name:'D',start:1,end:36},{name:'E',start:1,end:36},{name:'F',start:1,end:36},
     {name:'G',start:1,end:36},{name:'H',start:1,end:36},{name:'I',start:1,end:36},
@@ -387,373 +427,277 @@ const GINGA_LAYOUT = {
     {name:'M',start:4,end:33},{name:'N',start:6,end:31},{name:'O',start:8,end:29},
     {name:'P',start:10,end:27},{name:'Q',start:13,end:24},
   ],
-  missing: [['P',13],['P',24]],
-  // 座席表画像上の座標パラメータ（画像左上基準の%）
-  // 実際の画像に合わせて調整できます
-  topPct:   11,  // A列のY位置(%)
-  bottomPct:92,  // Q列のY位置(%)
-  leftPct:   8,  // 最左端席のX位置(%)（D列1番基準）
-  rightPct: 92,  // 最右端席のX位置(%)（D列36番基準）
-  aisleAfter12Pct: 1.8, // 12-13番間の通路幅(%)
-  aisleAfter24Pct: 1.8, // 24-25番間の通路幅(%)
+  topPct:11,bottomPct:92,leftPct:8,rightPct:92,
+  aisleAfter12:1.8,aisleAfter24:1.8,
 };
-
-function calcSeatPosition(theaterId, rowLabel, seatNum) {
-  // 銀河劇場以外は位置計算非対応（nullを返す）
-  if (theaterId !== 't_ginga') return null;
-  const L = GINGA_LAYOUT;
-  const rowIdx = L.rows.findIndex(r=>r.name===rowLabel);
-  if (rowIdx < 0) return null;
-  const num = parseInt(seatNum);
-  const totalRows = L.rows.length;
-
-  // Y座標
-  const yPct = L.topPct + (rowIdx / (totalRows-1)) * (L.bottomPct - L.topPct);
-
-  // X座標：全座席の横幅に対する相対位置
-  // D列(1-36)を基準に正規化
-  const baseRow = L.rows.find(r=>r.name==='D');
-  const totalSeats = baseRow.end; // 36席
-  const seatW = (L.rightPct - L.leftPct) / (totalSeats - 1 + 2 * (L.aisleAfter12Pct + L.aisleAfter24Pct) / ((L.rightPct-L.leftPct)/totalSeats));
-
-  // 通路オフセット
-  let aisle = 0;
-  if (num >= 13) aisle += L.aisleAfter12Pct;
-  if (num >= 25) aisle += L.aisleAfter24Pct;
-  const xRaw = L.leftPct + ((num - 1) / (totalSeats - 1)) * (L.rightPct - L.leftPct) + aisle;
-  // 端の行は縮小されているのでcenter補正
-  const curRow = L.rows[rowIdx];
-  const centerSeat = (curRow.start + curRow.end) / 2;
-  const baseCenterSeat = (baseRow.start + baseRow.end) / 2;
-  const xPct = xRaw; // 簡易計算（必要に応じて劇場ごとに調整可）
-  return {x: xPct, y: yPct};
+function calcSeatPos(theaterId,rowLabel,seatNum){
+  if(theaterId!=='t_ginga')return null;
+  const L=GINGA;
+  const rowIdx=L.rows.findIndex(r=>r.name===rowLabel);
+  if(rowIdx<0)return null;
+  const num=parseInt(seatNum);
+  const yPct=L.topPct+(rowIdx/(L.rows.length-1))*(L.bottomPct-L.topPct);
+  const baseRow=L.rows.find(r=>r.name==='D');
+  const totalSeats=baseRow.end;
+  let aisle=0;
+  if(num>=13)aisle+=L.aisleAfter12;
+  if(num>=25)aisle+=L.aisleAfter24;
+  const xPct=L.leftPct+((num-1)/(totalSeats-1))*(L.rightPct-L.leftPct)+aisle;
+  return{x:xPct,y:yPct};
 }
 
-function openSeatModal(theaterId, rowLabel, seatNum, perfId) {
-  const img = images[theaterId];
-  if (!img) return;
-  document.getElementById('modal-img').src = img;
-  const marker  = document.getElementById('modal-marker');
-  const label   = document.getElementById('modal-label');
-  const pos = calcSeatPosition(theaterId, rowLabel, seatNum);
-  if (pos) {
-    marker.style.display = 'flex';
-    marker.style.left = pos.x + '%';
-    marker.style.top  = pos.y + '%';
-    // マーカーサイズ（拡大表示想定で少し大きく）
-    marker.style.width  = '32px';
-    marker.style.height = '32px';
-    marker.style.fontSize = '10px';
-    marker.textContent = `${rowLabel}${seatNum}`;
-    label.style.display = 'block';
-    label.textContent   = `${rowLabel}列 ${seatNum}番`;
-  } else {
-    marker.style.display = 'none';
-    label.style.display  = 'none';
+// =============================================
+// 座席モーダル（ピンチズーム対応）
+// =============================================
+let pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};
+
+function openSingleSeatModal(theaterId,rowLabel,seatNum){
+  const img=images[theaterId];if(!img)return;
+  document.getElementById('modal-img').src=img;
+  const dots=document.getElementById('modal-dots');
+  dots.innerHTML='';
+  const pos=calcSeatPos(theaterId,rowLabel,seatNum);
+  if(pos){
+    const dot=document.createElement('div');
+    dot.className='modal-dot';
+    dot.style.left=pos.x+'%';
+    dot.style.top=pos.y+'%';
+    dot.innerHTML=`<div class="dot"></div>`;
+    dots.appendChild(dot);
   }
+  document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
+  resetPinch();
   document.getElementById('seat-modal').classList.add('open');
+  initPinch();
 }
 
-function openImgModal(theaterId) {
-  const img = images[theaterId];
-  if (!img) return;
-  document.getElementById('modal-img').src = img;
-  document.getElementById('modal-marker').style.display = 'none';
-  document.getElementById('modal-label').style.display  = 'none';
+function openBulkSeatModal(){
+  if(checkedIds.size===0){alert('公演を選択してください');return;}
+  const selected=performances.filter(p=>checkedIds.has(p.id));
+  if(!selected.length)return;
+  // 同じ劇場の公演のみ表示可能（最初の劇場を基準）
+  const theaterId=selected[0].theaterId;
+  const img=images[theaterId];
+  if(!img){alert('選択した公演の劇場に座席表画像が登録されていません');return;}
+  document.getElementById('modal-img').src=img;
+  const dots=document.getElementById('modal-dots');
+  dots.innerHTML='';
+  selected.forEach(p=>{
+    if(p.theaterId!==theaterId)return; // 異なる劇場はスキップ
+    const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
+    if(pos){
+      const dot=document.createElement('div');
+      dot.className='modal-dot';
+      dot.style.left=pos.x+'%';
+      dot.style.top=pos.y+'%';
+      const dateStr=fmtDate(p.datetime);
+      dot.innerHTML=`<div class="dot-label">${dateStr}</div><div class="dot"></div>`;
+      dots.appendChild(dot);
+    }
+  });
+  document.getElementById('modal-hint').textContent='ピンチで拡大 ／ 異なる劇場は非表示';
+  resetPinch();
   document.getElementById('seat-modal').classList.add('open');
+  initPinch();
 }
 
-function closeSeatModal() { document.getElementById('seat-modal').classList.remove('open'); }
-function closeModal(e) { if (e.target.id==='seat-modal') closeSeatModal(); }
+function openImgModal(theaterId){
+  const img=images[theaterId];if(!img)return;
+  document.getElementById('modal-img').src=img;
+  document.getElementById('modal-dots').innerHTML='';
+  document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
+  resetPinch();
+  document.getElementById('seat-modal').classList.add('open');
+  initPinch();
+}
+
+function closeSeatModal(){document.getElementById('seat-modal').classList.remove('open');resetPinch();}
+
+function resetPinch(){
+  pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};
+  applyTransform();
+}
+function applyTransform(){
+  const el=document.getElementById('modal-inner');
+  el.style.transform=`translate(${pinchState.tx}px,${pinchState.ty}px) scale(${pinchState.scale})`;
+}
+function getDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
+function getMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
+
+function initPinch(){
+  const pc=document.getElementById('pinch-container');
+  pc.ontouchstart=e=>{
+    if(e.touches.length===2){
+      e.preventDefault();
+      pinchState.startDist=getDist(e.touches);
+      pinchState.lastScale=pinchState.scale;
+      const m=getMid(e.touches);
+      pinchState.startMx=m.x; pinchState.startMy=m.y;
+      pinchState.lastTx=pinchState.tx; pinchState.lastTy=pinchState.ty;
+    } else if(e.touches.length===1){
+      pinchState.startMx=e.touches[0].clientX-pinchState.tx;
+      pinchState.startMy=e.touches[0].clientY-pinchState.ty;
+    }
+  };
+  pc.ontouchmove=e=>{
+    e.preventDefault();
+    if(e.touches.length===2){
+      const dist=getDist(e.touches);
+      const newScale=Math.min(5,Math.max(1,pinchState.lastScale*(dist/pinchState.startDist)));
+      pinchState.scale=newScale;
+      const m=getMid(e.touches);
+      pinchState.tx=pinchState.lastTx+(m.x-pinchState.startMx);
+      pinchState.ty=pinchState.lastTy+(m.y-pinchState.startMy);
+      applyTransform();
+    } else if(e.touches.length===1&&pinchState.scale>1){
+      pinchState.tx=e.touches[0].clientX-pinchState.startMx;
+      pinchState.ty=e.touches[0].clientY-pinchState.startMy;
+      applyTransform();
+    }
+  };
+  pc.ontouchend=e=>{
+    if(e.touches.length<2&&pinchState.scale<1.05){resetPinch();}
+  };
+  // ダブルタップでリセット
+  let lastTap=0;
+  pc.onclick=e=>{
+    const now=Date.now();
+    if(now-lastTap<300){resetPinch();}
+    lastTap=now;
+  };
+}
+// モーダル外タップで閉じる
+document.getElementById('seat-modal').addEventListener('click',e=>{
+  if(e.target.id==='seat-modal')closeSeatModal();
+});
 
 // =============================================
 // TAB2: 座席表
 // =============================================
-let selectedTheater = null;
-
-function renderSeatView() {
-  const el = document.getElementById('pane1');
-  const chips = theaters.map(t =>
-    `<div class="chip${selectedTheater===t.id?' selected':''}" onclick="selectTheater('${t.id}')">${t.name}</div>`
-  ).join('');
-
-  let detail = '';
-  if (!selectedTheater) {
-    detail = '<div class="seat-placeholder">劇場を選択してください</div>';
+let selectedTheater=null;
+function renderSeatView(){
+  const el=document.getElementById('pane1');
+  const chips=theaters.map(t=>`<div class="chip${selectedTheater===t.id?' selected':''}" onclick="selectTheater('${t.id}')">${t.name}</div>`).join('');
+  let detail='';
+  if(!selectedTheater){
+    detail='<div class="seat-placeholder">劇場を選択してください</div>';
   } else {
-    const th  = getTheater(selectedTheater);
-    const img = images[selectedTheater];
-    const perfs = performances.filter(p=>p.theaterId===selectedTheater);
-
-    detail += `<div style="font-weight:700;font-size:15px;margin-bottom:2px">${th.name}</div>
+    const th=getTheater(selectedTheater);
+    const img=images[selectedTheater];
+    const perfs=performances.filter(p=>p.theaterId===selectedTheater);
+    detail+=`<div style="font-weight:700;font-size:15px;margin-bottom:2px">${th.name}</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:2px">${th.place||''}</div>
       ${th.address?`<div style="font-size:11px;color:var(--text3);margin-bottom:10px">${th.address}</div>`:''}`;
-
-    detail += '<div class="seat-container">';
-    if (img) {
-      detail += `<img class="seat-img" src="${img}" alt="座席表" onclick="openImgModal('${selectedTheater}')">`;
+    detail+='<div class="seat-container">';
+    if(img){
+      detail+=`<img class="seat-img" src="${img}" alt="座席表" onclick="openImgModal('${selectedTheater}')">`;
       perfs.forEach(p=>{
-        if (p.markerX&&p.markerY) {
-          const cls = p.type==='self'?'self-mark':'other-mark';
-          const lbl = `${p.rowLabel||''}${p.seatNum||''}`;
-          detail += `<div class="seat-marker ${cls}" style="left:${p.markerX}%;top:${p.markerY}%">${lbl}</div>`;
+        const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
+        if(pos){
+          detail+=`<div class="seat-marker" style="left:${pos.x}%;top:${pos.y}%"></div>`;
+        } else if(p.markerX&&p.markerY){
+          detail+=`<div class="seat-marker" style="left:${p.markerX}%;top:${p.markerY}%"></div>`;
         }
       });
     } else {
-      detail += `<div class="seat-placeholder">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="14" width="32" height="20" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/><rect x="24" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/></svg>
-        <span>座席表画像が未登録です</span></div>`;
+      detail+=`<div class="seat-placeholder"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="14" width="32" height="20" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/><rect x="24" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/></svg><span>座席表画像が未登録です</span></div>`;
     }
-    detail += '</div>';
-
-    // 画像アップロード・変更・削除
-    const btnLabel = img ? '🖼️ 座席表画像を変更' : '📁 座席表画像をアップロード';
-    detail += `<div style="margin-top:8px">
-      <div class="upload-area" onclick="document.getElementById('seat-img-input').click()" style="padding:9px 14px">
-        <span id="seat-img-label">${btnLabel}</span>
-      </div>
+    detail+='</div>';
+    const btnLabel=img?'🖼️ 座席表画像を変更':'📁 座席表画像をアップロード';
+    detail+=`<div style="margin-top:8px">
+      <div class="upload-area" onclick="document.getElementById('seat-img-input').click()" style="padding:9px 14px"><span>${btnLabel}</span></div>
       <input type="file" id="seat-img-input" accept="image/*" style="display:none" onchange="uploadSeatImg(this,'${selectedTheater}')">
-      ${img ? `<button class="btn danger" style="margin-top:6px;font-size:12px;padding:7px" onclick="deleteSeatImg('${selectedTheater}')">🗑️ 画像を削除</button>` : ''}
-      ${img ? `<button class="btn seat-btn" style="margin-top:6px" onclick="openImgModal('${selectedTheater}')">🔍 座席表を拡大表示</button>` : ''}
-    </div>`;
-
-    // 劇場削除ボタン
-    detail += `<button class="btn danger" style="margin-top:10px;font-size:12px" onclick="deleteTheater('${selectedTheater}')">🗑️ この劇場を削除する</button>`;
-
-    // 登録公演一覧
-    if (perfs.length) {
-      detail += '<div style="margin-top:12px"><div class="subsection">この劇場の登録公演</div>';
+      ${img?`<button class="btn danger" style="margin-top:6px;font-size:12px;padding:7px" onclick="deleteSeatImg('${selectedTheater}')">🗑️ 画像を削除</button>`:''}
+      ${img?`<button class="btn seat-btn" style="margin-top:6px" onclick="openImgModal('${selectedTheater}')">🔍 座席表を拡大表示</button>`:''}
+    </div>
+    <button class="btn danger" style="margin-top:10px;font-size:12px" onclick="deleteTheater('${selectedTheater}')">🗑️ この劇場を削除する</button>`;
+    if(perfs.length){
+      detail+='<div style="margin-top:12px"><div class="subsection">この劇場の登録公演</div>';
       [...perfs].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).forEach(p=>{
-        detail += `<div class="card" style="padding:9px 12px">
-          <div class="row-flex">${typeBadge(p.type)}${p.title?`<span style="font-size:12px;font-weight:600">${p.title}</span>`:''}</div>
-          <div class="info-row" style="margin-top:5px"><span class="info-label">日時</span>${fmtDt(p.datetime)}</div>
-          <div class="info-row"><span class="info-label">座席</span>${p.rowLabel||''}列 ${p.seatNum||''}番 × ${p.count}枚</div>
-        </div>`;
+        detail+=`<div class="card" style="padding:9px 12px"><div class="row-flex">${typeBadge(p.type)}${p.title?`<span style="font-size:12px;font-weight:600">${p.title}</span>`:''}</div><div class="info-row" style="margin-top:5px"><span class="info-label">日時</span>${fmtDt(p.datetime)}</div><div class="info-row"><span class="info-label">座席</span>${p.rowLabel||''}列 ${p.seatNum||''}番 × ${p.count}枚</div></div>`;
       });
-      detail += '</div>';
+      detail+='</div>';
     }
   }
-
-  el.innerHTML = `<div style="padding:16px">
-    <div class="section-title">劇場を選択</div>
-    <div class="chips-wrap">${chips}</div>
-    ${detail}
-  </div>`;
+  el.innerHTML=`<div style="padding:16px"><div class="section-title">劇場を選択</div><div class="chips-wrap">${chips}</div>${detail}</div>`;
 }
-
-function selectTheater(id) { selectedTheater=id; renderSeatView(); }
-
-async function uploadSeatImg(input, theaterId) {
-  const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async e => {
-    await dbPut('images', {theaterId, dataUrl: e.target.result});
-    await reloadAll();
-    renderSeatView();
-  };
-  reader.readAsDataURL(file);
-}
-
-async function deleteSeatImg(theaterId) {
-  if (!confirm('座席表画像を削除しますか？')) return;
-  await dbDelete('images', theaterId);
-  await reloadAll();
-  renderSeatView();
-}
-
-async function deleteTheater(id) {
-  const th = getTheater(id);
-  if (!confirm(`「${th.name}」を削除しますか？\n※この劇場に紐付いた公演データは残ります`)) return;
-  await dbDelete('theaters', id);
-  await dbDelete('images', id);
-  await reloadAll();
-  selectedTheater = null;
-  renderSeatView();
-}
+function selectTheater(id){selectedTheater=id;renderSeatView();}
+async function uploadSeatImg(input,theaterId){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=async e=>{await dbPut('images',{theaterId,dataUrl:e.target.result});await reloadAll();renderSeatView();};reader.readAsDataURL(file);}
+async function deleteSeatImg(theaterId){if(!confirm('座席表画像を削除しますか？'))return;await dbDelete('images',theaterId);await reloadAll();renderSeatView();}
+async function deleteTheater(id){const th=getTheater(id);if(!confirm(`「${th.name}」を削除しますか？\n※公演データは残ります`))return;await dbDelete('theaters',id);await dbDelete('images',id);await reloadAll();selectedTheater=null;renderSeatView();}
 
 // =============================================
 // TAB3: 登録
 // =============================================
-function renderRegPage() {
-  const titleOpts   = '<option value="">タイトルを選択</option>' + titles.map(t=>`<option value="${t}">${t}</option>`).join('');
-  const theaterOpts = '<option value="">劇場を選択</option>' + theaters.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
-  const rowOpts     = ['','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}">${r||'選択'}</option>`).join('');
-
-  const titleListHtml = titles.length
-    ? titles.map((t,i)=>`<div class="card" style="padding:9px 12px"><div class="row-flex"><span style="font-size:13px">${t}</span><button class="del-btn" onclick="deleteTitle(${i})">削除</button></div></div>`).join('')
-    : '<div style="font-size:13px;color:var(--text3);padding:4px 0">未登録</div>';
-
-  const perfListHtml = performances.length
-    ? [...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{
-        const th=getTheater(p.theaterId);
-        return `<div class="card" style="padding:9px 12px">
-          <div class="row-flex">
-            ${typeBadge(p.type)}
-            <span style="font-size:13px;font-weight:600">${th.name||'不明'}</span>
-            ${p.hidden?'<span class="badge hidden" style="font-size:10px">非表示</span>':''}
-            <button class="del-btn" onclick="deletePerf('${p.id}')">削除</button>
-          </div>
-          ${p.title?`<div style="font-size:12px;color:var(--text2);margin-top:3px">${p.title}</div>`:''}
-          <div style="font-size:12px;color:var(--text3);margin-top:2px">${fmtDt(p.datetime)} ／ ${p.rowLabel||''}列${p.seatNum||''}番 × ${p.count}枚</div>
-        </div>`;
-      }).join('')
-    : '<div class="empty">まだ登録されていません</div>';
-
-  document.getElementById('pane2').innerHTML = `<div style="padding:16px">
+function renderRegPage(){
+  const titleOpts='<option value="">タイトルを選択</option>'+titles.map(t=>`<option value="${t}">${t}</option>`).join('');
+  const theaterOpts='<option value="">劇場を選択</option>'+theaters.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  const rowOpts=['','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}">${r||'選択'}</option>`).join('');
+  const titleListHtml=titles.length?titles.map((t,i)=>`<div class="card" style="padding:9px 12px"><div class="row-flex"><span style="font-size:13px">${t}</span><button class="del-btn" onclick="deleteTitle(${i})">削除</button></div></div>`).join(''):'<div style="font-size:13px;color:var(--text3);padding:4px 0">未登録</div>';
+  const perfListHtml=performances.length?[...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{const th=getTheater(p.theaterId);return `<div class="card" style="padding:9px 12px"><div class="row-flex">${typeBadge(p.type)}<span style="font-size:13px;font-weight:600">${th.name||'不明'}</span>${p.hidden?'<span class="badge hidden-b" style="font-size:10px">非表示</span>':''}<button class="del-btn" onclick="deletePerf('${p.id}')">削除</button></div>${p.title?`<div style="font-size:12px;color:var(--text2);margin-top:3px">${p.title}</div>`:''}<div style="font-size:12px;color:var(--text3);margin-top:2px">${fmtDt(p.datetime)} ／ ${p.rowLabel||''}列${p.seatNum||''}番 × ${p.count}枚</div></div>`;}).join(''):'<div class="empty">まだ登録されていません</div>';
+  document.getElementById('pane2').innerHTML=`<div style="padding:16px">
     <div class="section-title">公演を登録</div>
-
     <label class="field">公演タイトル *</label>
-    <div class="row-flex">
-      <select id="reg-title" style="flex:1">${titleOpts}</select>
-      <button class="btn sm" onclick="showAddTitle()">＋追加</button>
-    </div>
-    <div id="add-title-form" style="display:none;margin-top:8px">
-      <div class="row-flex">
-        <input type="text" id="new-title-input" placeholder="公演タイトルを入力" style="flex:1">
-        <button class="btn sm primary" onclick="saveTitle()">保存</button>
-        <button class="btn sm" onclick="hideAddTitle()">✕</button>
-      </div>
-    </div>
-
-    <label class="field">劇場 *</label>
-    <select id="reg-theater">${theaterOpts}</select>
-
-    <label class="field">公演日時 *</label>
-    <input type="datetime-local" id="reg-datetime">
-
-    <div class="grid2">
-      <div><label class="field">列 *</label><select id="reg-row">${rowOpts}</select></div>
-      <div><label class="field">番号 *</label><input type="number" id="reg-num" placeholder="例: 15" min="1" max="40"></div>
-    </div>
-
-    <label class="field">枚数</label>
-    <input type="number" id="reg-count" value="1" min="1" max="10">
-
+    <div class="row-flex"><select id="reg-title" style="flex:1">${titleOpts}</select><button class="btn sm" onclick="showAddTitle()">＋追加</button></div>
+    <div id="add-title-form" style="display:none;margin-top:8px"><div class="row-flex"><input type="text" id="new-title-input" placeholder="公演タイトルを入力" style="flex:1"><button class="btn sm primary" onclick="saveTitle()">保存</button><button class="btn sm" onclick="hideAddTitle()">✕</button></div></div>
+    <label class="field">劇場 *</label><select id="reg-theater">${theaterOpts}</select>
+    <label class="field">公演日時 *</label><input type="datetime-local" id="reg-datetime">
+    <div class="grid2"><div><label class="field">列 *</label><select id="reg-row">${rowOpts}</select></div><div><label class="field">番号 *</label><input type="number" id="reg-num" placeholder="例: 15" min="1" max="40"></div></div>
+    <label class="field">枚数</label><input type="number" id="reg-count" value="1" min="1" max="10">
     <label class="field">チケット種別 *</label>
     <div class="check-group">
       <label class="check-item"><input type="radio" name="ttype" value="self" checked> 自分用</label>
       <label class="check-item"><input type="radio" name="ttype" value="companion"> 連番用</label>
       <label class="check-item"><input type="radio" name="ttype" value="duplicate"> 重複分</label>
     </div>
-
-    <label class="field">メモ</label>
-    <textarea id="reg-memo" placeholder="キャスト、感想など自由に"></textarea>
-
+    <label class="field">メモ</label><textarea id="reg-memo" placeholder="キャスト、感想など自由に"></textarea>
     <button class="btn primary" onclick="addPerformance()">登録する</button>
-
     <div class="divider"></div>
     <div class="section-title">データ出力</div>
     <button class="btn excel" onclick="exportExcel()">📊 Excelファイルを出力（CSV）</button>
-
     <div class="divider"></div>
-    <div class="section-title">公演タイトル管理</div>
-    ${titleListHtml}
-
+    <div class="section-title">公演タイトル管理</div>${titleListHtml}
     <div class="divider"></div>
     <div class="section-title">劇場を登録</div>
-    <label class="field">劇場名 *</label>
-    <input type="text" id="th-name" placeholder="例: 帝国劇場">
-    <label class="field">場所（土地名）</label>
-    <input type="text" id="th-place" placeholder="例: 東京・日比谷">
-    <label class="field">住所</label>
-    <input type="text" id="th-address" placeholder="〒xxx-xxxx 都道府県…">
+    <label class="field">劇場名 *</label><input type="text" id="th-name" placeholder="例: 帝国劇場">
+    <label class="field">場所（土地名）</label><input type="text" id="th-place" placeholder="例: 東京・日比谷">
+    <label class="field">住所</label><input type="text" id="th-address" placeholder="〒xxx-xxxx 都道府県…">
     <label class="field">座席表画像（PNG/JPG）</label>
-    <div class="upload-area" onclick="document.getElementById('th-img-new').click()">
-      <div id="img-label-new">📁 タップして画像を選択</div>
-    </div>
+    <div class="upload-area" onclick="document.getElementById('th-img-new').click()"><div id="img-label-new">📁 タップして画像を選択</div></div>
     <input type="file" id="th-img-new" accept="image/*" style="display:none" onchange="previewImgNew(this)">
     <img id="img-preview-new" style="display:none;width:100%;border-radius:var(--radius);margin-top:8px;border:1px solid var(--border)">
     <button class="btn" onclick="addTheater()">劇場を追加</button>
-
     <div class="divider"></div>
-    <div class="section-title">登録済み公演一覧</div>
-    ${perfListHtml}
+    <div class="section-title">登録済み公演一覧</div>${perfListHtml}
   </div>`;
 }
-
-// ===== タイトル =====
-function showAddTitle() { document.getElementById('add-title-form').style.display='block'; }
-function hideAddTitle() { document.getElementById('add-title-form').style.display='none'; document.getElementById('new-title-input').value=''; }
-async function saveTitle() {
-  const val = document.getElementById('new-title-input').value.trim();
-  if (!val) return;
-  if (titles.includes(val)) { alert('すでに登録されています'); return; }
-  await dbPut('titles',{id:Date.now(),name:val});
-  await reloadAll(); hideAddTitle(); renderRegPage();
-}
-async function deleteTitle(idx) {
-  if (!confirm('このタイトルを削除しますか？')) return;
-  const ts = await dbGetAll('titles');
-  if (ts[idx]) await dbDelete('titles',ts[idx].id);
-  await reloadAll(); renderRegPage();
-}
-
-// ===== 公演登録・削除 =====
-async function addPerformance() {
-  const title    = document.getElementById('reg-title').value;
-  const tid      = document.getElementById('reg-theater').value;
-  const dt       = document.getElementById('reg-datetime').value;
-  const rowLabel = document.getElementById('reg-row').value;
-  const seatNum  = document.getElementById('reg-num').value;
-  const count    = parseInt(document.getElementById('reg-count').value)||1;
-  const type     = document.querySelector('input[name="ttype"]:checked')?.value||'self';
-  const memo     = document.getElementById('reg-memo').value;
-  if (!tid||!dt||!rowLabel||!seatNum) { alert('劇場・日時・列・番号は必須です'); return; }
+function showAddTitle(){document.getElementById('add-title-form').style.display='block';}
+function hideAddTitle(){document.getElementById('add-title-form').style.display='none';document.getElementById('new-title-input').value='';}
+async function saveTitle(){const val=document.getElementById('new-title-input').value.trim();if(!val)return;if(titles.includes(val)){alert('すでに登録されています');return;}await dbPut('titles',{id:Date.now(),name:val});await reloadAll();hideAddTitle();renderRegPage();}
+async function deleteTitle(idx){if(!confirm('このタイトルを削除しますか？'))return;const ts=await dbGetAll('titles');if(ts[idx])await dbDelete('titles',ts[idx].id);await reloadAll();renderRegPage();}
+async function addPerformance(){
+  const title=document.getElementById('reg-title').value;
+  const tid=document.getElementById('reg-theater').value;
+  const dt=document.getElementById('reg-datetime').value;
+  const rowLabel=document.getElementById('reg-row').value;
+  const seatNum=document.getElementById('reg-num').value;
+  const count=parseInt(document.getElementById('reg-count').value)||1;
+  const type=document.querySelector('input[name="ttype"]:checked')?.value||'self';
+  const memo=document.getElementById('reg-memo').value;
+  if(!tid||!dt||!rowLabel||!seatNum){alert('劇場・日時・列・番号は必須です');return;}
   await dbPut('performances',{id:'p'+Date.now(),title,theaterId:tid,datetime:dt,rowLabel,seatNum,count,type,memo,hidden:false});
-  await reloadAll(); renderRegPage(); alert('登録しました！');
+  await reloadAll();renderRegPage();alert('登録しました！');
 }
-async function deletePerf(id) {
-  if (!confirm('この公演を削除しますか？')) return;
-  await dbDelete('performances',id); await reloadAll(); renderRegPage();
-}
-
-// ===== 劇場登録 =====
-let pendingImgDataUrl = null;
-function previewImgNew(input) {
-  const file=input.files[0]; if (!file) return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    pendingImgDataUrl=e.target.result;
-    const prev=document.getElementById('img-preview-new');
-    prev.src=pendingImgDataUrl; prev.style.display='block';
-    document.getElementById('img-label-new').textContent='✓ '+file.name;
-  };
-  reader.readAsDataURL(file);
-}
-async function addTheater() {
-  const name    = document.getElementById('th-name').value.trim();
-  const place   = document.getElementById('th-place').value.trim();
-  const address = document.getElementById('th-address').value.trim();
-  if (!name) { alert('劇場名を入力してください'); return; }
-  if (theaters.find(t=>t.name===name)) { alert('同名の劇場がすでに登録されています'); return; }
-  const id = 't'+Date.now();
-  await dbPut('theaters',{id,name,place,address});
-  if (pendingImgDataUrl) await dbPut('images',{theaterId:id,dataUrl:pendingImgDataUrl});
-  await reloadAll(); pendingImgDataUrl=null; renderRegPage(); alert(`「${name}」を登録しました！`);
-}
-
-// ===== Excel出力 =====
-function exportExcel() {
-  if (!performances.length) { alert('登録されている公演がありません'); return; }
-  const BOM = '\uFEFF';
-  const headers = ['公演タイトル','劇場名','場所','住所','公演日時','列','番号','枚数','種別','非表示','メモ'];
-  const rows = [...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{
-    const th=getTheater(p.theaterId);
-    return [p.title||'',th.name||'',th.place||'',th.address||'',fmtDt(p.datetime),p.rowLabel||'',p.seatNum||'',p.count,typeLabel(p.type),p.hidden?'非表示':'',(p.memo||'').replace(/\n/g,' ')]
-      .map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');
-  });
-  const csv = BOM+[headers.join(','),...rows].join('\r\n');
-  const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a'); a.href=url; a.download='観劇記録.csv'; a.click(); URL.revokeObjectURL(url);
-}
+async function deletePerf(id){if(!confirm('この公演を削除しますか？'))return;await dbDelete('performances',id);await reloadAll();renderRegPage();}
+let pendingImgDataUrl=null;
+function previewImgNew(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingImgDataUrl=e.target.result;const prev=document.getElementById('img-preview-new');prev.src=pendingImgDataUrl;prev.style.display='block';document.getElementById('img-label-new').textContent='✓ '+file.name;};reader.readAsDataURL(file);}
+async function addTheater(){const name=document.getElementById('th-name').value.trim();const place=document.getElementById('th-place').value.trim();const address=document.getElementById('th-address').value.trim();if(!name){alert('劇場名を入力してください');return;}if(theaters.find(t=>t.name===name)){alert('同名の劇場がすでに登録されています');return;}const id='t'+Date.now();await dbPut('theaters',{id,name,place,address});if(pendingImgDataUrl)await dbPut('images',{theaterId:id,dataUrl:pendingImgDataUrl});await reloadAll();pendingImgDataUrl=null;renderRegPage();alert(`「${name}」を登録しました！`);}
+function exportExcel(){if(!performances.length){alert('登録されている公演がありません');return;}const BOM='\uFEFF';const headers=['公演タイトル','劇場名','場所','住所','公演日時','列','番号','枚数','種別','非表示','メモ'];const rows=[...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{const th=getTheater(p.theaterId);return[p.title||'',th.name||'',th.place||'',th.address||'',fmtDt(p.datetime),p.rowLabel||'',p.seatNum||'',p.count,typeLabel(p.type),p.hidden?'非表示':'',(p.memo||'').replace(/\n/g,' ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');});const csv=BOM+[headers.join(','),...rows].join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='観劇記録.csv';a.click();URL.revokeObjectURL(url);}
 
 // =============================================
 // 起動
 // =============================================
-initApp().catch(err=>{
-  document.getElementById('pane0').innerHTML=`<div class="empty">初期化エラー: ${err.message}</div>`;
-});
+initApp().catch(err=>{document.getElementById('pane0').innerHTML=`<div class="empty">初期化エラー: ${err.message}</div>`;});
 </script>
 </body>
 </html>
