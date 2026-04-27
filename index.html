@@ -91,7 +91,7 @@ textarea{resize:vertical;min-height:56px}
 .modal-dot{position:absolute;transform:translate(-50%,-100%);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
 .modal-dot .dot{width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.6);flex-shrink:0}
 .modal-dot .dot.blue{background:var(--blue)}
-.modal-dot .dot-label{background:rgba(20,20,20,.85);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;white-space:nowrap;letter-spacing:.3px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.modal-dot .dot-label{background:rgba(20,20,20,.85);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;white-space:nowrap;letter-spacing:.3px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .modal-hint{color:rgba(255,255,255,.7);font-size:11px;margin-top:8px;letter-spacing:.3px}
 /* 編集モーダル */
 .edit-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-end;justify-content:center}
@@ -597,16 +597,18 @@ function renderSeatView(){
     const perfs=performances.filter(p=>p.theaterId===selectedTheater);
     detail+=`<div style="font-weight:700;font-size:15px;margin-bottom:2px">${th.name}</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:2px">${th.place||''}</div>
-      ${th.address?`<div style="font-size:11px;color:var(--text3);margin-bottom:10px">${th.address}</div>`:''}`;
+      ${th.address?`<div style="font-size:11px;color:var(--text3);margin-bottom:4px">${th.address}</div>`:''}
+      ${th.url?`<a href="${th.url}" target="_blank" rel="noopener" style="display:block;font-size:11px;color:var(--blue);text-decoration:underline;margin-bottom:10px">🔗 公式座席表を見る</a>`:''}`;
     detail+='<div class="seat-container">';
     if(img){
       detail+=`<img class="seat-img" src="${img}" alt="座席表" onclick="openImgModal('${selectedTheater}')">`;
       perfs.filter(p=>!isPast(p.datetime)).forEach(p=>{
         const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
+        const markerColor=(p.type==='companion'||p.type==='duplicate')?'background:var(--blue)':'background:var(--red)';
         if(pos){
-          detail+=`<div class="seat-marker" style="left:${pos.x}%;top:${pos.y}%"></div>`;
+          detail+=`<div class="seat-marker" style="left:${pos.x}%;top:${pos.y}%;${markerColor}"></div>`;
         } else if(p.markerX&&p.markerY){
-          detail+=`<div class="seat-marker" style="left:${p.markerX}%;top:${p.markerY}%"></div>`;
+          detail+=`<div class="seat-marker" style="left:${p.markerX}%;top:${p.markerY}%;${markerColor}"></div>`;
         }
       });
     } else {
@@ -645,6 +647,15 @@ function renderRegPage(){
   const rowOpts=['','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}">${r||'選択'}</option>`).join('');
   const titleListHtml=titles.length?titles.map((t,i)=>`<div class="card" style="padding:9px 12px"><div class="row-flex"><span style="font-size:13px">${t}</span><button class="del-btn" onclick="deleteTitle(${i})">削除</button></div></div>`).join(''):'<div style="font-size:13px;color:var(--text3);padding:4px 0">未登録</div>';
   const perfListHtml=performances.length?[...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{const th=getTheater(p.theaterId);return `<div class="card" style="padding:9px 12px"><div class="row-flex">${typeBadge(p.type)}<span style="font-size:13px;font-weight:600">${th.name||'不明'}</span>${p.hidden?'<span class="badge hidden-b" style="font-size:10px">非表示</span>':''}<button class="del-btn" onclick="deletePerf('${p.id}')">削除</button></div>${p.title?`<div style="font-size:12px;color:var(--text2);margin-top:3px">${p.title}</div>`:''}<div style="font-size:12px;color:var(--text3);margin-top:2px">${fmtDt(p.datetime)} ／ ${p.rowLabel||''}列${p.seatNum||''}番 × ${p.count}枚</div></div>`;}).join(''):'<div class="empty">まだ登録されていません</div>';
+  // 劇場編集リスト生成（innerHTML設定後にセット）
+  const theaterEditHtml=theaters.map(t=>`<div class="card" style="padding:9px 12px">
+    <div class="row-flex">
+      <span style="font-size:13px;font-weight:600;flex:1">${t.name}</span>
+      <button class="edit-btn" onclick="openTheaterEdit('${t.id}')">✏️ 編集</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:2px">${t.place||''}${t.address?' / '+t.address:''}</div>
+    ${t.url?`<div style="font-size:11px;margin-top:2px"><a href="${t.url}" target="_blank" rel="noopener" style="color:var(--blue)">🔗 公式座席表</a></div>`:''}
+  </div>`).join('');
   document.getElementById('pane2').innerHTML=`<div style="padding:16px">
     <div class="section-title">公演を登録</div>
     <label class="field">公演タイトル *</label>
@@ -668,10 +679,14 @@ function renderRegPage(){
     <div class="divider"></div>
     <div class="section-title">公演タイトル管理</div>${titleListHtml}
     <div class="divider"></div>
-    <div class="section-title">劇場を登録</div>
+    <div class="section-title">登録済み劇場を編集</div>
+    <div id="theater-edit-list"></div>
+    <div class="divider"></div>
+    <div class="section-title">劇場を新規登録</div>
     <label class="field">劇場名 *</label><input type="text" id="th-name" placeholder="例: 帝国劇場">
     <label class="field">場所（土地名）</label><input type="text" id="th-place" placeholder="例: 東京・日比谷">
     <label class="field">住所</label><input type="text" id="th-address" placeholder="〒xxx-xxxx 都道府県…">
+    <label class="field">公式座席表URL</label><input type="url" id="th-url" placeholder="https://...">
     <label class="field">座席表画像（PNG/JPG）</label>
     <div class="upload-area" onclick="document.getElementById('th-img-new').click()"><div id="img-label-new">📁 タップして画像を選択</div></div>
     <input type="file" id="th-img-new" accept="image/*" style="display:none" onchange="previewImgNew(this)">
@@ -680,6 +695,20 @@ function renderRegPage(){
     <div class="divider"></div>
     <div class="section-title">登録済み公演一覧</div>${perfListHtml}
   </div>`;
+}
+// innerHTML設定後に劇場編集リストを反映
+function updateTheaterEditList(){
+  const el=document.getElementById('theater-edit-list');
+  if(!el)return;
+  el.innerHTML=theaters.map(t=>`<div class="card" style="padding:9px 12px">
+    <div class="row-flex">
+      <span style="font-size:13px;font-weight:600;flex:1">${t.name}</span>
+      <button class="edit-btn" onclick="openTheaterEdit('${t.id}')">✏️ 編集</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:2px">${t.place||''}${t.address?' / '+t.address:''}</div>
+    ${t.url?`<div style="font-size:11px;margin-top:2px"><a href="${t.url}" target="_blank" rel="noopener" style="color:var(--blue)">🔗 公式座席表</a></div>`:''}
+  </div>`).join('');
+  updateTheaterEditList();
 }
 function showAddTitle(){document.getElementById('add-title-form').style.display='block';}
 function hideAddTitle(){document.getElementById('add-title-form').style.display='none';document.getElementById('new-title-input').value='';}
@@ -701,8 +730,45 @@ async function addPerformance(){
 async function deletePerf(id){if(!confirm('この公演を削除しますか？'))return;await dbDelete('performances',id);await reloadAll();renderRegPage();}
 let pendingImgDataUrl=null;
 function previewImgNew(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{pendingImgDataUrl=e.target.result;const prev=document.getElementById('img-preview-new');prev.src=pendingImgDataUrl;prev.style.display='block';document.getElementById('img-label-new').textContent='✓ '+file.name;};reader.readAsDataURL(file);}
-async function addTheater(){const name=document.getElementById('th-name').value.trim();const place=document.getElementById('th-place').value.trim();const address=document.getElementById('th-address').value.trim();if(!name){alert('劇場名を入力してください');return;}if(theaters.find(t=>t.name===name)){alert('同名の劇場がすでに登録されています');return;}const id='t'+Date.now();await dbPut('theaters',{id,name,place,address});if(pendingImgDataUrl)await dbPut('images',{theaterId:id,dataUrl:pendingImgDataUrl});await reloadAll();pendingImgDataUrl=null;renderRegPage();alert(`「${name}」を登録しました！`);}
+async function addTheater(){const name=document.getElementById('th-name').value.trim();const place=document.getElementById('th-place').value.trim();const address=document.getElementById('th-address').value.trim();const url=document.getElementById('th-url').value.trim();if(!name){alert('劇場名を入力してください');return;}if(theaters.find(t=>t.name===name)){alert('同名の劇場がすでに登録されています');return;}const id='t'+Date.now();await dbPut('theaters',{id,name,place,address,url});if(pendingImgDataUrl)await dbPut('images',{theaterId:id,dataUrl:pendingImgDataUrl});await reloadAll();pendingImgDataUrl=null;renderRegPage();alert(`「${name}」を登録しました！`);}
 function exportExcel(){if(!performances.length){alert('登録されている公演がありません');return;}const BOM='\uFEFF';const headers=['公演タイトル','劇場名','場所','住所','公演日時','列','番号','枚数','種別','非表示','メモ'];const rows=[...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{const th=getTheater(p.theaterId);return[p.title||'',th.name||'',th.place||'',th.address||'',fmtDt(p.datetime),p.rowLabel||'',p.seatNum||'',p.count,typeLabel(p.type),p.hidden?'非表示':'',(p.memo||'').replace(/\n/g,' ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');});const csv=BOM+[headers.join(','),...rows].join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='観劇記録.csv';a.click();URL.revokeObjectURL(url);}
+
+// =============================================
+// 劇場編集
+// =============================================
+let editingTheaterId=null;
+function openTheaterEdit(id){
+  editingTheaterId=id;
+  const t=getTheater(id);
+  const rowOpts=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}">${r}</option>`).join('');
+  document.getElementById('edit-form-body').innerHTML=`
+    <label class="field">劇場名 *</label>
+    <input type="text" id="eth-name" value="${t.name||''}">
+    <label class="field">場所（土地名）</label>
+    <input type="text" id="eth-place" value="${t.place||''}">
+    <label class="field">住所</label>
+    <input type="text" id="eth-address" value="${t.address||''}">
+    <label class="field">公式座席表URL</label>
+    <input type="url" id="eth-url" value="${t.url||''}" placeholder="https://...">`;
+  document.querySelector('.edit-sheet-title').textContent='劇場情報を編集';
+  // saveEditを劇場用に切り替え
+  document.querySelector('.edit-sheet .btn.primary').setAttribute('onclick','saveTheaterEdit()');
+  document.getElementById('edit-modal').classList.add('open');
+}
+async function saveTheaterEdit(){
+  if(!editingTheaterId)return;
+  const t=getTheater(editingTheaterId);
+  t.name=document.getElementById('eth-name').value.trim();
+  t.place=document.getElementById('eth-place').value.trim();
+  t.address=document.getElementById('eth-address').value.trim();
+  t.url=document.getElementById('eth-url').value.trim();
+  if(!t.name){alert('劇場名は必須です');return;}
+  await dbPut('theaters',t);
+  await reloadAll();
+  closeEditModal();
+  renderRegPage();
+  renderSeatView();
+}
 
 // =============================================
 // 起動
