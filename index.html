@@ -112,10 +112,10 @@ textarea{resize:vertical;min-height:56px}
 .cal-cell.sat-cell .cal-day{color:#4060a0}
 .cal-perf-dot{display:flex;align-items:center;gap:2px;font-size:9px;color:var(--text);margin-bottom:1px;line-height:1.3}
 .cal-perf-dot .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
-.cal-run{font-size:8px;margin-top:1px;overflow:hidden;border-radius:2px;padding:1px 3px;line-height:1.5;white-space:nowrap;text-overflow:ellipsis;max-width:100%;box-sizing:border-box}
-.cal-run.run-start{border-radius:3px 0 0 3px}
-.cal-run.run-mid{border-radius:0;padding-left:2px}
-.cal-run.run-end{border-radius:0 3px 3px 0}
+.cal-week-wrap{position:relative}
+.cal-week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
+.cal-run-layer{position:absolute;top:0;left:0;width:100%;pointer-events:none;padding:0 1px}
+.cal-run-bar{position:absolute;height:14px;border-radius:3px;display:flex;align-items:center;padding:0 4px;font-size:8px;font-weight:600;white-space:nowrap;overflow:hidden;pointer-events:none}
 /* 公演期間登録 */
 .run-item{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
 ::-webkit-scrollbar{width:4px}
@@ -315,23 +315,24 @@ function renderSchedule(){
     ${(filterTitle||filterTheater||filterMonth||filterType)?`<button class="btn xs" style="margin-top:8px;color:var(--text2)" onclick="filterTitle='';filterTheater='';filterMonth='';filterType='';renderSchedule()">✕ クリア</button>`:''}
   </div>`;
 
-  // ▼ 一括座席確認（折りたたみ式、ボタンだけ標準表示）
+  // ▼ 一括座席確認（折りたたみ式 - DOM直接操作でチェック状態を維持）
   const bulkable=visible.filter(p=>images[p.theaterId]);
   if(bulkable.length>0){
+    const bulkIds=JSON.stringify(bulkable.map(p=>p.id));
     html+=`<details id="bulk-details" style="margin-bottom:10px">
       <summary style="list-style:none;background:#f0eaf8;border:1px solid #c8b0e0;border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-weight:700;color:#6040a0;cursor:pointer;display:flex;align-items:center;gap:6px">
         🎭 選択した座席を一括表示
       </summary>
       <div style="background:#f8f4fc;border:1px solid #c8b0e0;border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px">
         <div style="display:flex;gap:6px;margin-bottom:8px">
-          <button class="btn xs" onclick="checkAllBulk(${JSON.stringify(bulkable.map(p=>p.id))})">全選択</button>
-          <button class="btn xs" onclick="checkedIds=new Set();renderSchedule()">全解除</button>
+          <button class="btn xs" id="bulk-all-btn" onclick="checkAllBulkDom()">全選択</button>
+          <button class="btn xs" id="bulk-none-btn" onclick="clearAllBulkDom()">全解除</button>
         </div>
-        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px">
+        <div id="bulk-check-list" style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px">
           ${bulkable.map(p=>{
             const th=getTheater(p.theaterId);
             return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
-              <input type="checkbox" data-bulkid="${p.id}" ${checkedIds.has(p.id)?'checked':''} onchange="toggleCheck('${p.id}')" style="width:15px;height:15px;accent-color:#8060b0">
+              <input type="checkbox" class="bulk-cb" data-pid="${p.id}" ${checkedIds.has(p.id)?'checked':''} style="width:15px;height:15px;accent-color:#8060b0">
               <span style="color:var(--text2)">${fmtDate(p.datetime)} ${th.name} ${p.rowLabel||''}列${p.seatNum||''}番</span>
             </label>`;
           }).join('')}
@@ -378,16 +379,17 @@ function toggleMemoCollapse(val){
   renderSchedule();
 }
 
-function checkAllBulk(ids){
-  ids.forEach(id=>{
-    checkedIds.add(id);
-    const cb=document.querySelector(`input[data-bulkid="${id}"]`);
-    if(cb)cb.checked=true;
+function checkAllBulkDom(){
+  document.querySelectorAll('.bulk-cb').forEach(cb=>{
+    cb.checked=true;
+    checkedIds.add(cb.dataset.pid);
   });
 }
-function toggleCheck(id){
-  if(checkedIds.has(id))checkedIds.delete(id);else checkedIds.add(id);
-  // DOMは既にチェックボックスが更新済み、再描画不要
+function clearAllBulkDom(){
+  document.querySelectorAll('.bulk-cb').forEach(cb=>{
+    cb.checked=false;
+    checkedIds.delete(cb.dataset.pid);
+  });
 }
 
 function buildScheduleCard(p){
@@ -512,10 +514,11 @@ function renderCalendar(){
   const year=calYear, month=calMonth;
   const firstDay=new Date(year,month,1);
   const lastDay=new Date(year,month+1,0);
-  const startDow=firstDay.getDay(); // 0=日
+  const startDow=firstDay.getDay();
   const totalCells=Math.ceil((startDow+lastDay.getDate())/7)*7;
+  const numWeeks=totalCells/7;
 
-  // 公演をdateKeyでグルーピング
+  // 公演をdateKeyでグルーピング（自分用のみ）
   const perfByDate={};
   performances.filter(p=>!p.hidden&&p.type==='self').forEach(p=>{
     const k=dateKey(new Date(p.datetime));
@@ -526,64 +529,118 @@ function renderCalendar(){
   const todayKey=dateKey(new Date());
   const jpHolidays=calcJpHolidays(year);
 
-  let html=`<div style="padding:16px">
-    <div class="cal-header">
-      <button class="cal-nav" onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar()">＜</button>
-      <div class="cal-title">${year}年 ${month+1}月</div>
-      <button class="cal-nav" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar()">＞</button>
-    </div>
-    <div class="cal-grid">
-      <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
-      <div class="cal-dow">水</div><div class="cal-dow">木</div><div class="cal-dow">金</div>
-      <div class="cal-dow sat">土</div>`;
-
+  // セル情報を先に全部構築
+  const cells=[];
   for(let i=0;i<totalCells;i++){
     const dayOffset=i-startDow;
     const d=new Date(year,month,1+dayOffset);
     const isCurrentMonth=d.getMonth()===month;
     const dk=dateKey(d);
     const dow=d.getDay();
-    const isTodayCell=dk===todayKey;
     const isHoliday=isCurrentMonth&&jpHolidays.has(dk);
-    let cellCls='cal-cell';
-    if(!isCurrentMonth)cellCls+=' other-month';
-    if(isTodayCell)cellCls+=' today-cell';
-    if(dow===0||isHoliday)cellCls+=' sun-cell';
-    if(dow===6)cellCls+=' sat-cell';
+    cells.push({d,isCurrentMonth,dk,dow,isHoliday,isTodayCell:dk===todayKey});
+  }
 
-    // 公演ドット
-    let dotsHtml='';
-    if(isCurrentMonth&&perfByDate[dk]){
-      perfByDate[dk].forEach(p=>{
-        dotsHtml+=`<div class="cal-perf-dot"><span class="dot" style="background:var(--red)"></span><span>${fmtTime(p.datetime)}</span></div>`;
-      });
-    }
+  // 週ごとに処理
+  let html=`<div style="padding:16px">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar()">＜</button>
+      <div class="cal-title">${year}年 ${month+1}月</div>
+      <button class="cal-nav" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar()">＞</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);margin-bottom:1px">
+      <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
+      <div class="cal-dow">水</div><div class="cal-dow">木</div><div class="cal-dow">金</div>
+      <div class="cal-dow sat">土</div>
+    </div>`;
 
-    // 公演期間バー
-    let runBars='';
-    if(isCurrentMonth){
-      runs.forEach((r,ri)=>{
-        const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
-        const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
-        // 休演日チェック
-        const isRestDay=(r.restDays||[]).includes(dk);
-        if(d>=rStart&&d<=rEnd){
-          const color=RUN_COLORS[ri%RUN_COLORS.length];
-          if(isRestDay){
-            runBars+=`<div style="font-size:8px;color:#4060c0;font-weight:700;padding:1px 2px">休演日</div>`;
-          } else {
-            const isFirst=dateKey(rStart)===dk;
-            const posCls=isFirst?'run-start':dateKey(rEnd)===dk?'run-end':'run-mid';
-            const label=isFirst?'▶ '+r.title:'';
-            runBars+=`<div class="cal-run ${posCls}" style="background:${color}25;color:${color};border-left:${isFirst?'2px':'1px'} solid ${color}">${label}</div>`;
-          }
+  // 各週を独立したラッパーとして描画（帯がセルをまたげる）
+  for(let w=0;w<numWeeks;w++){
+    const weekCells=cells.slice(w*7,(w+1)*7);
+    const cellH=72; // min-heightと同じ
+
+    // この週に含まれるdateKeyのSet
+    const weekDkSet=new Set(weekCells.map(c=>c.dk));
+
+    // 帯レイヤー：runs×週
+    let barLayerHtml='';
+    let barSlot=0; // 帯の縦方向スロット（複数run対応）
+    runs.forEach((r,ri)=>{
+      const color=RUN_COLORS[ri%RUN_COLORS.length];
+      const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
+      const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
+
+      // この週でrunが存在する範囲を計算
+      let startCol=-1, endCol=-1;
+      weekCells.forEach((c,ci)=>{
+        if(c.isCurrentMonth&&c.d>=rStart&&c.d<=rEnd&&!(r.restDays||[]).includes(c.dk)){
+          if(startCol===-1)startCol=ci;
+          endCol=ci;
         }
       });
-    }
+      if(startCol===-1)return;
 
-    html+=`<div class="${cellCls}">
-      <div class="cal-day">${isCurrentMonth?d.getDate():''}</div>
-      ${runBars}${dotsHtml}
+      const pct=(col)=>(col/7*100)+'%';
+      const widthPct=((endCol-startCol+1)/7*100)+'%';
+      const topPx=16+barSlot*16; // 日付行(16px)の下から
+      const isRunStart=dateKey(rStart)===weekCells[startCol].dk;
+      const label=isRunStart?r.title:(r.area||'');
+      const showLabel=isRunStart||startCol===0;
+
+      barLayerHtml+=`<div class="cal-run-bar" style="left:${pct(startCol)};width:${widthPct};top:${topPx}px;background:${color};color:#fff;border-radius:${startCol===0&&!isRunStart?'0':'3px'} ${endCol===6?'0':'3px'} ${endCol===6?'0':'3px'} ${startCol===0&&!isRunStart?'0':'3px'}">${showLabel?label:''}</div>`;
+      barSlot++;
+    });
+
+    // 休演日は各セルに表示
+    const restDayMap={};
+    runs.forEach(r=>{
+      (r.restDays||[]).forEach(dk=>{
+        if(weekDkSet.has(dk)){
+          if(!restDayMap[dk])restDayMap[dk]=[];
+          restDayMap[dk].push(r);
+        }
+      });
+    });
+
+    // セルHTML
+    let cellsHtml='';
+    // runが占めるスロット数分の上部パディング
+    const activeRunsInWeek=runs.filter(r=>{
+      const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
+      const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
+      return weekCells.some(c=>c.isCurrentMonth&&c.d>=rStart&&c.d<=rEnd);
+    }).length;
+    const runPadding=activeRunsInWeek>0?activeRunsInWeek*16+4:0;
+
+    weekCells.forEach(c=>{
+      let cellCls='cal-cell';
+      if(!c.isCurrentMonth)cellCls+=' other-month';
+      if(c.isTodayCell)cellCls+=' today-cell';
+      if(c.dow===0||c.isHoliday)cellCls+=' sun-cell';
+      if(c.dow===6)cellCls+=' sat-cell';
+
+      let dotsHtml='';
+      if(c.isCurrentMonth&&perfByDate[c.dk]){
+        perfByDate[c.dk].forEach(p=>{
+          dotsHtml+=`<div class="cal-perf-dot"><span class="dot"></span><span>${fmtTime(p.datetime)}</span></div>`;
+        });
+      }
+
+      // 休演日
+      let restHtml='';
+      if(restDayMap[c.dk]){
+        restHtml=`<div style="font-size:8px;color:#4060c0;font-weight:700;line-height:1.4">休演日</div>`;
+      }
+
+      cellsHtml+=`<div class="${cellCls}" style="min-height:${Math.max(cellH,cellH+runPadding-20)}px">
+        <div class="cal-day" style="padding-top:${runPadding}px">${c.isCurrentMonth?c.d.getDate():''}</div>
+        ${restHtml}${dotsHtml}
+      </div>`;
+    });
+
+    html+=`<div class="cal-week-wrap">
+      <div class="cal-week-cells" style="background:var(--border)">${cellsHtml}</div>
+      <div class="cal-run-layer" style="top:0">${barLayerHtml}</div>
     </div>`;
   }
   html+='</div>';
@@ -829,6 +886,9 @@ function openSingleSeatModal(theaterId,rowLabel,seatNum,perfId){
   resetPinch();document.getElementById('seat-modal').classList.add('open');initPinch();
 }
 function openBulkSeatModal(){
+  // DOM上のチェック状態をcheckedIdsに同期
+  checkedIds=new Set();
+  document.querySelectorAll('.bulk-cb:checked').forEach(cb=>checkedIds.add(cb.dataset.pid));
   if(checkedIds.size===0){alert('公演を選択してください');return;}
   const selected=performances.filter(p=>checkedIds.has(p.id));
   if(!selected.length)return;
