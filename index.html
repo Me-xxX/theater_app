@@ -112,10 +112,11 @@ textarea{resize:vertical;min-height:56px}
 .cal-cell.sat-cell .cal-day{color:#4060a0}
 .cal-perf-dot{display:flex;align-items:center;gap:2px;font-size:9px;color:var(--text);margin-bottom:1px;line-height:1.3}
 .cal-perf-dot .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
-.cal-week-wrap{position:relative}
-.cal-week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
-.cal-run-layer{position:absolute;top:0;left:0;width:100%;pointer-events:none;padding:0 1px}
-.cal-run-bar{position:absolute;height:14px;border-radius:3px;display:flex;align-items:center;padding:0 4px;font-size:8px;font-weight:600;white-space:nowrap;overflow:hidden;pointer-events:none}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid var(--border);border-top:1px solid var(--border)}
+.cal-cell{border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-height:76px;padding:3px 2px;background:#fff;vertical-align:top}
+.cal-cell.other-month{background:var(--bg2)}
+.cal-cell.today-cell{background:#fff8f6}
+.cal-run-inline{font-size:8px;font-weight:700;padding:1px 3px;line-height:1.5;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:1px;color:#fff}
 /* 公演期間登録 */
 .run-item{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
 ::-webkit-scrollbar{width:4px}
@@ -548,102 +549,81 @@ function renderCalendar(){
       <div class="cal-title">${year}年 ${month+1}月</div>
       <button class="cal-nav" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar()">＞</button>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border);margin-bottom:1px">
-      <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
-      <div class="cal-dow">水</div><div class="cal-dow">木</div><div class="cal-dow">金</div>
-      <div class="cal-dow sat">土</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid var(--border);border-top:1px solid var(--border)">
+      <div class="cal-dow sun" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">日</div>
+      <div class="cal-dow" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">月</div>
+      <div class="cal-dow" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">火</div>
+      <div class="cal-dow" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">水</div>
+      <div class="cal-dow" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">木</div>
+      <div class="cal-dow" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">金</div>
+      <div class="cal-dow sat" style="border-right:1px solid var(--border);border-bottom:1px solid var(--border)">土</div>
     </div>`;
 
-  // 各週を独立したラッパーとして描画（帯がセルをまたげる）
-  for(let w=0;w<numWeeks;w++){
-    const weekCells=cells.slice(w*7,(w+1)*7);
-    const cellH=72; // min-heightと同じ
-
-    // この週に含まれるdateKeyのSet
-    const weekDkSet=new Set(weekCells.map(c=>c.dk));
-
-    // 帯レイヤー：runs×週
-    let barLayerHtml='';
-    let barSlot=0; // 帯の縦方向スロット（複数run対応）
+  // グリッド全セル描画（日付→帯→公演時間 の順）
+  // 各セルにその日の run 情報を付与
+  const cellRunMap={}; // dk -> [{color,label,isStart,isEnd,isRest}]
+  cells.forEach(c=>{
+    if(!c.isCurrentMonth)return;
+    const arr=[];
     runs.forEach((r,ri)=>{
       const color=RUN_COLORS[ri%RUN_COLORS.length];
       const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
       const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
+      if(c.d>=rStart&&c.d<=rEnd){
+        const isRest=(r.restDays||[]).includes(c.dk);
+        const isStart=dateKey(rStart)===c.dk;
+        // 週頭(日曜)も見出し表示
+        const isWeekStart=c.dow===0;
+        const showTitle=isStart||isWeekStart;
+        const label=showTitle?(r.title+(r.area?' ('+r.area+')':'')):'';
+        arr.push({color,label,isRest,isStart,isWeekStart,ri});
+      }
+    });
+    if(arr.length)cellRunMap[c.dk]=arr;
+  });
 
-      // この週でrunが存在する範囲を計算
-      let startCol=-1, endCol=-1;
-      weekCells.forEach((c,ci)=>{
-        if(c.isCurrentMonth&&c.d>=rStart&&c.d<=rEnd&&!(r.restDays||[]).includes(c.dk)){
-          if(startCol===-1)startCol=ci;
-          endCol=ci;
+  let gridHtml='<div class="cal-grid">';
+  cells.forEach((c,i)=>{
+    let cellCls='cal-cell';
+    if(!c.isCurrentMonth)cellCls+=' other-month';
+    if(c.isTodayCell)cellCls+=' today-cell';
+    if(c.dow===0||c.isHoliday)cellCls+=' sun-cell';
+    if(c.dow===6)cellCls+=' sat-cell';
+
+    // 1. 日付
+    const dayHtml=`<div class="cal-day">${c.isCurrentMonth?c.d.getDate():''}</div>`;
+
+    // 2. 帯（日付の下）
+    let barsHtml='';
+    if(c.isCurrentMonth&&cellRunMap[c.dk]){
+      cellRunMap[c.dk].forEach(rb=>{
+        if(rb.isRest){
+          barsHtml+=`<div style="font-size:8px;color:#4060c0;font-weight:700;padding:0 2px;line-height:1.6">休演日</div>`;
+        } else {
+          // 週末(土)は右角丸なし、週頭(日)は左角丸なし（ただし開始日は角丸あり）
+          const rStart=new Date(runs[rb.ri].startDate);rStart.setHours(0,0,0,0);
+          const rEnd=new Date(runs[rb.ri].endDate);rEnd.setHours(23,59,59,999);
+          const isEnd=dateKey(rEnd)===c.dk;
+          const rl=rb.isStart?'3px':'0';
+          const rr=(isEnd||c.dow===6)?'3px':'0';
+          barsHtml+=`<div class="cal-run-inline" style="background:${rb.color};border-radius:${rl} ${rr} ${rr} ${rl}">${rb.label}</div>`;
         }
       });
-      if(startCol===-1)return;
+    }
 
-      const pct=(col)=>(col/7*100)+'%';
-      const widthPct=((endCol-startCol+1)/7*100)+'%';
-      const topPx=16+barSlot*16; // 日付行(16px)の下から
-      const isRunStart=dateKey(rStart)===weekCells[startCol].dk;
-      const label=isRunStart?r.title:(r.area||'');
-      const showLabel=isRunStart||startCol===0;
-
-      barLayerHtml+=`<div class="cal-run-bar" style="left:${pct(startCol)};width:${widthPct};top:${topPx}px;background:${color};color:#fff;border-radius:${startCol===0&&!isRunStart?'0':'3px'} ${endCol===6?'0':'3px'} ${endCol===6?'0':'3px'} ${startCol===0&&!isRunStart?'0':'3px'}">${showLabel?label:''}</div>`;
-      barSlot++;
-    });
-
-    // 休演日は各セルに表示
-    const restDayMap={};
-    runs.forEach(r=>{
-      (r.restDays||[]).forEach(dk=>{
-        if(weekDkSet.has(dk)){
-          if(!restDayMap[dk])restDayMap[dk]=[];
-          restDayMap[dk].push(r);
-        }
+    // 3. 公演ドット（帯の下）
+    let dotsHtml='';
+    if(c.isCurrentMonth&&perfByDate[c.dk]){
+      perfByDate[c.dk].forEach(p=>{
+        dotsHtml+=`<div class="cal-perf-dot"><span class="dot"></span><span>${fmtTime(p.datetime)}</span></div>`;
       });
-    });
+    }
 
-    // セルHTML
-    let cellsHtml='';
-    // runが占めるスロット数分の上部パディング
-    const activeRunsInWeek=runs.filter(r=>{
-      const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
-      const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
-      return weekCells.some(c=>c.isCurrentMonth&&c.d>=rStart&&c.d<=rEnd);
-    }).length;
-    const runPadding=activeRunsInWeek>0?activeRunsInWeek*16+4:0;
+    gridHtml+=`<div class="${cellCls}">${dayHtml}${barsHtml}${dotsHtml}</div>`;
+  });
+  gridHtml+='</div>';
 
-    weekCells.forEach(c=>{
-      let cellCls='cal-cell';
-      if(!c.isCurrentMonth)cellCls+=' other-month';
-      if(c.isTodayCell)cellCls+=' today-cell';
-      if(c.dow===0||c.isHoliday)cellCls+=' sun-cell';
-      if(c.dow===6)cellCls+=' sat-cell';
-
-      let dotsHtml='';
-      if(c.isCurrentMonth&&perfByDate[c.dk]){
-        perfByDate[c.dk].forEach(p=>{
-          dotsHtml+=`<div class="cal-perf-dot"><span class="dot"></span><span>${fmtTime(p.datetime)}</span></div>`;
-        });
-      }
-
-      // 休演日
-      let restHtml='';
-      if(restDayMap[c.dk]){
-        restHtml=`<div style="font-size:8px;color:#4060c0;font-weight:700;line-height:1.4">休演日</div>`;
-      }
-
-      cellsHtml+=`<div class="${cellCls}" style="min-height:${Math.max(cellH,cellH+runPadding-20)}px">
-        <div class="cal-day" style="padding-top:${runPadding}px">${c.isCurrentMonth?c.d.getDate():''}</div>
-        ${restHtml}${dotsHtml}
-      </div>`;
-    });
-
-    html+=`<div class="cal-week-wrap">
-      <div class="cal-week-cells" style="background:var(--border)">${cellsHtml}</div>
-      <div class="cal-run-layer" style="top:0">${barLayerHtml}</div>
-    </div>`;
-  }
-  html+='</div>';
+  html+=gridHtml+'</div>';
 
   // 公演期間一覧
   html+=`<div class="divider" style="margin-top:14px"></div>
