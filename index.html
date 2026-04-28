@@ -22,7 +22,7 @@
 body{font-family:"Hiragino Kaku Gothic Pro","Meiryo",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .app{max-width:440px;margin:0 auto;padding-bottom:80px}
 .tab-bar{display:flex;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
-.tab{flex:1;padding:12px 2px;font-size:11px;font-weight:600;text-align:center;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;letter-spacing:.3px}
+.tab{flex:1;padding:10px 2px;font-size:10px;font-weight:600;text-align:center;color:var(--text3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;letter-spacing:.2px}
 .tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .pane{display:none;padding:16px}
 .pane.active{display:block}
@@ -45,7 +45,6 @@ input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border)
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 textarea{resize:vertical;min-height:56px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .btn{display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;color:var(--text);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;text-align:center;margin-top:10px;transition:all .2s}
 .btn:hover{background:var(--bg2)}
 .btn.primary{background:var(--accent);color:#fff;border:none}
@@ -65,10 +64,9 @@ textarea{resize:vertical;min-height:56px}
 .check-group{display:flex;gap:14px;flex-wrap:wrap;padding:6px 0}
 .check-item{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px}
 .check-item input[type=radio]{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
-/* 座席コンテナ */
 .seat-container{position:relative;width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--bg2);min-height:150px}
 .seat-img{width:100%;display:block;cursor:zoom-in}
-.seat-marker{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);z-index:5;pointer-events:none;background:var(--red);width:10px;height:10px}
+.seat-marker{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);z-index:5;pointer-events:none;width:10px;height:10px}
 .info-row{display:flex;gap:6px;font-size:13px;margin:3px 0;align-items:flex-start}
 .info-label{font-size:11px;font-weight:600;color:var(--text3);min-width:54px;padding-top:1px}
 .del-btn{font-size:11px;color:var(--red);cursor:pointer;background:none;border:none;padding:2px 5px;font-family:inherit;flex-shrink:0}
@@ -78,13 +76,11 @@ textarea{resize:vertical;min-height:56px}
 .upload-area:hover{background:var(--bg2);border-color:var(--accent)}
 .empty{text-align:center;padding:2rem 1rem;color:var(--text3);font-size:13px}
 .loading{text-align:center;padding:2rem;color:var(--text3);font-size:13px}
-/* フィルタ */
-.filter-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px}
-/* モーダル（拡大・座席確認） */
+.filter-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px}
+/* モーダル */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;flex-direction:column;align-items:center;justify-content:center;touch-action:none}
 .modal-overlay.open{display:flex}
 .modal-close{position:fixed;top:14px;right:16px;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:22px;cursor:pointer;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;z-index:1002;touch-action:manipulation}
-/* ピンチズーム対応コンテナ */
 .pinch-container{position:relative;overflow:hidden;width:92vw;max-height:80vh;display:flex;align-items:center;justify-content:center;border-radius:var(--radius)}
 #modal-inner{position:relative;transform-origin:center center;will-change:transform;display:inline-block;line-height:0}
 #modal-img{display:block;max-width:92vw;max-height:80vh;border-radius:var(--radius);pointer-events:none;user-select:none}
@@ -93,11 +89,32 @@ textarea{resize:vertical;min-height:56px}
 .modal-dot .dot.blue{background:var(--blue)}
 .modal-dot .dot-label{background:rgba(20,20,20,.85);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:999px;white-space:nowrap;letter-spacing:.3px;box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .modal-hint{color:rgba(255,255,255,.7);font-size:11px;margin-top:8px;letter-spacing:.3px}
-/* 編集モーダル */
+/* 編集シート */
 .edit-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-end;justify-content:center}
 .edit-modal.open{display:flex}
 .edit-sheet{background:var(--bg);border-radius:16px 16px 0 0;width:100%;max-width:440px;padding:20px 16px 36px;max-height:90vh;overflow-y:auto}
 .edit-sheet-title{font-size:15px;font-weight:700;margin-bottom:14px;text-align:center}
+/* カレンダー */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-nav{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 12px;font-size:14px;cursor:pointer;color:var(--text2)}
+.cal-title{font-size:15px;font-weight:700;color:var(--text)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
+.cal-dow{background:var(--bg2);text-align:center;font-size:10px;font-weight:700;color:var(--text3);padding:5px 0}
+.cal-dow.sun{color:#c04040}
+.cal-dow.sat{color:#4060a0}
+.cal-cell{background:#fff;min-height:72px;padding:3px;position:relative;cursor:pointer;transition:background .15s}
+.cal-cell:hover{background:#fef8f4}
+.cal-cell.other-month{background:var(--bg2)}
+.cal-cell.today-cell{background:#fff8f6}
+.cal-day{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px;line-height:1.2}
+.cal-cell.today-cell .cal-day{color:var(--accent);font-weight:800}
+.cal-cell.sun-cell .cal-day{color:#c04040}
+.cal-cell.sat-cell .cal-day{color:#4060a0}
+.cal-perf-dot{display:flex;align-items:center;gap:2px;font-size:9px;color:var(--text);margin-bottom:1px;line-height:1.3}
+.cal-perf-dot .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
+.cal-run{font-size:8px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:2px;padding:0 2px;line-height:1.6}
+/* 公演期間登録 */
+.run-item{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 </style>
@@ -107,14 +124,16 @@ textarea{resize:vertical;min-height:56px}
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab(0)">観劇予定</div>
     <div class="tab" onclick="switchTab(1)">座席表</div>
-    <div class="tab" onclick="switchTab(2)">登録</div>
+    <div class="tab" onclick="switchTab(2)">カレンダー</div>
+    <div class="tab" onclick="switchTab(3)">登録</div>
   </div>
   <div class="pane active" id="pane0"><div class="loading">読み込み中...</div></div>
   <div class="pane" id="pane1"><div class="loading">読み込み中...</div></div>
   <div class="pane" id="pane2"><div class="loading">読み込み中...</div></div>
+  <div class="pane" id="pane3"><div class="loading">読み込み中...</div></div>
 </div>
 
-<!-- 座席拡大・一括座席確認モーダル -->
+<!-- 座席モーダル -->
 <div class="modal-overlay" id="seat-modal">
   <button class="modal-close" onclick="closeSeatModal()">✕</button>
   <div class="pinch-container" id="pinch-container">
@@ -129,9 +148,9 @@ textarea{resize:vertical;min-height:56px}
 <!-- 編集シート -->
 <div class="edit-modal" id="edit-modal">
   <div class="edit-sheet" id="edit-sheet">
-    <div class="edit-sheet-title">公演を編集</div>
+    <div class="edit-sheet-title">編集</div>
     <div id="edit-form-body"></div>
-    <button class="btn primary" style="margin-top:14px" onclick="saveEdit()">保存する</button>
+    <button class="btn primary" id="edit-save-btn" style="margin-top:14px" onclick="saveEdit()">保存する</button>
     <button class="btn" style="margin-top:8px" onclick="closeEditModal()">キャンセル</button>
   </div>
 </div>
@@ -140,20 +159,23 @@ textarea{resize:vertical;min-height:56px}
 // =============================================
 // IndexedDB
 // =============================================
-const DB_NAME='TheaterAppDB', DB_VERSION=2;
+const DB_NAME='TheaterAppDB', DB_VERSION=3;
 let db=null;
 const DEFAULT_THEATERS=[
-  {id:'t_ginga',   name:'天王洲アイル 銀河劇場',      place:'東京・天王洲アイル', address:'〒140-0002 東京都品川区東品川2-1-3'},
-  {id:'t_stella',  name:'品川プリンス ステラボール',    place:'東京・品川',        address:'〒108-8611 東京都港区高輪4-10-30 品川プリンスホテル内'},
-  {id:'t_hika',    name:'シアターH',                  place:'東京・大井町',      address:'〒140-0012 東京都品川区勝島1-6-29'},
-  {id:'t_mbs',     name:'skyシアターMBS',              place:'大阪・難波',        address:'〒542-0076 大阪府大阪市中央区難波5-1-60 なんばスカイオ12F'},
-  {id:'t_tachi',   name:'立川ステージガーデン',         place:'東京・立川',        address:'〒190-0014 東京都立川市緑町3-1 GREEN SPRINGS W3棟'},
-  {id:'t_seinen',  name:'日本青年館ホール',             place:'東京・外苑前',      address:'〒160-0013 東京都新宿区霞ヶ丘町4-1'},
-  {id:'t_sun',     name:'サンシャイン劇場',             place:'東京・池袋',        address:'〒170-0013 東京都豊島区東池袋3-1-4 サンシャインシティ文化会館4F'},
-  {id:'t_aiia',    name:'AiiA 2.5 Theater Kobe',      place:'兵庫・神戸',        address:'〒651-0096 兵庫県神戸市中央区雲井通7-1-1 ミント神戸14F'},
-  {id:'t_sanmall', name:'シアターサンモール',           place:'東京・新宿',        address:'〒160-0022 東京都新宿区新宿3-14-20 サンモールビルB2F'},
-  {id:'t_zero',    name:'全労災ホール スペース・ゼロ',  place:'東京・新宿',        address:'〒151-0053 東京都渋谷区代々木2-12-10'},
+  {id:'t_ginga',   name:'天王洲アイル 銀河劇場',      place:'東京・天王洲アイル', address:'〒140-0002 東京都品川区東品川2-1-3',url:''},
+  {id:'t_stella',  name:'品川プリンス ステラボール',    place:'東京・品川',        address:'〒108-8611 東京都港区高輪4-10-30 品川プリンスホテル内',url:''},
+  {id:'t_hika',    name:'シアターH',                  place:'東京・大井町',      address:'〒140-0012 東京都品川区勝島1-6-29',url:''},
+  {id:'t_mbs',     name:'skyシアターMBS',              place:'大阪・難波',        address:'〒542-0076 大阪府大阪市中央区難波5-1-60 なんばスカイオ12F',url:''},
+  {id:'t_tachi',   name:'立川ステージガーデン',         place:'東京・立川',        address:'〒190-0014 東京都立川市緑町3-1 GREEN SPRINGS W3棟',url:''},
+  {id:'t_seinen',  name:'日本青年館ホール',             place:'東京・外苑前',      address:'〒160-0013 東京都新宿区霞ヶ丘町4-1',url:''},
+  {id:'t_sun',     name:'サンシャイン劇場',             place:'東京・池袋',        address:'〒170-0013 東京都豊島区東池袋3-1-4 サンシャインシティ文化会館4F',url:''},
+  {id:'t_aiia',    name:'AiiA 2.5 Theater Kobe',      place:'兵庫・神戸',        address:'〒651-0096 兵庫県神戸市中央区雲井通7-1-1 ミント神戸14F',url:''},
+  {id:'t_sanmall', name:'シアターサンモール',           place:'東京・新宿',        address:'〒160-0022 東京都新宿区新宿3-14-20 サンモールビルB2F',url:''},
+  {id:'t_zero',    name:'全労災ホール スペース・ゼロ',  place:'東京・新宿',        address:'〒151-0053 東京都渋谷区代々木2-12-10',url:''},
 ];
+// カラーパレット（公演期間ごとに割り当て）
+const RUN_COLORS=['#e87060','#6090d0','#60a870','#c070b0','#d0a040','#60b0b0','#9070d0','#d07040'];
+
 function openDB(){
   return new Promise((res,rej)=>{
     const req=indexedDB.open(DB_NAME,DB_VERSION);
@@ -163,6 +185,7 @@ function openDB(){
       if(!d.objectStoreNames.contains('performances')){const ps=d.createObjectStore('performances',{keyPath:'id'});ps.createIndex('datetime','datetime',{unique:false});}
       if(!d.objectStoreNames.contains('titles'))      d.createObjectStore('titles',{keyPath:'id',autoIncrement:true});
       if(!d.objectStoreNames.contains('images'))      d.createObjectStore('images',{keyPath:'theaterId'});
+      if(!d.objectStoreNames.contains('runs'))        d.createObjectStore('runs',{keyPath:'id'}); // 公演期間
     };
     req.onsuccess=e=>res(e.target.result);
     req.onerror=e=>rej(e.target.error);
@@ -175,12 +198,12 @@ const dbDelete=(s,k)=>new Promise((r,j)=>{const t=db.transaction(s,'readwrite');
 // =============================================
 // 状態
 // =============================================
-let theaters=[],performances=[],titles=[],images={};
+let theaters=[],performances=[],titles=[],images={},runs=[];
 let showPast=false;
-// フィルタ状態
 let filterTitle='',filterTheater='',filterMonth='',filterType='';
-// 一括チェック状態
 let checkedIds=new Set();
+let memoCollapsed=JSON.parse(localStorage.getItem('memoCollapsed')||'false');
+let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
 
 async function initApp(){
   db=await openDB();
@@ -202,6 +225,7 @@ async function reloadAll(){
   performances=await dbGetAll('performances');
   const ts=await dbGetAll('titles');titles=ts.map(t=>t.name);
   const imgs=await dbGetAll('images');images={};imgs.forEach(i=>{images[i.theaterId]=i.dataUrl;});
+  runs=await dbGetAll('runs');
 }
 
 // =============================================
@@ -209,7 +233,9 @@ async function reloadAll(){
 // =============================================
 function fmtDt(iso){if(!iso)return '';const d=new Date(iso);const days=['日','月','火','水','木','金','土'];return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function fmtDate(iso){if(!iso)return '';const d=new Date(iso);return `${d.getMonth()+1}/${d.getDate()}`;}
+function fmtTime(iso){if(!iso)return '';const d=new Date(iso);return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
 function fmtYM(iso){if(!iso)return '';const d=new Date(iso);return `${d.getFullYear()}年${d.getMonth()+1}月`;}
+function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 function todayStart(){const d=new Date();d.setHours(0,0,0,0);return d;}
 function tomorrowStart(){const d=todayStart();d.setDate(d.getDate()+1);return d;}
 function dayAfterStart(){const d=todayStart();d.setDate(d.getDate()+2);return d;}
@@ -233,17 +259,16 @@ function switchTab(i){
 function renderCurrentTab(){
   if(currentTab===0)renderSchedule();
   if(currentTab===1)renderSeatView();
-  if(currentTab===2)renderRegPage();
+  if(currentTab===2)renderCalendar();
+  if(currentTab===3)renderRegPage();
 }
 
 // =============================================
-// TAB1: 観劇予定
+// TAB0: 観劇予定
 // =============================================
 function renderSchedule(){
   const el=document.getElementById('pane0');
   const hiddenPerfs=performances.filter(p=>p.hidden);
-
-  // 絞り込み用の選択肢
   const allTitles=[...new Set(performances.map(p=>p.title).filter(Boolean))];
   const allTheaters=[...new Set(performances.map(p=>p.theaterId))];
   const allMonths=[...new Set(performances.map(p=>fmtYM(p.datetime)).filter(Boolean))].sort();
@@ -260,50 +285,79 @@ function renderSchedule(){
   let html='';
 
   // ▼ 絞り込みフィルタ
-  html+=`<div class="filter-box" style="margin-bottom:10px">
+  html+=`<div class="filter-box">
     <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px">🔍 絞り込み</div>
     <div class="grid2" style="margin-bottom:6px">
-      <div>
-        <select style="font-size:12px;padding:6px 8px" onchange="filterTitle=this.value;renderSchedule()">
-          <option value="">公演名</option>
-          ${allTitles.map(t=>`<option value="${t}" ${filterTitle===t?'selected':''}>${t}</option>`).join('')}
-        </select>
-      </div>
-      <div>
-        <select style="font-size:12px;padding:6px 8px" onchange="filterTheater=this.value;renderSchedule()">
-          <option value="">劇場</option>
-          ${allTheaters.map(id=>{const th=getTheater(id);return `<option value="${id}" ${filterTheater===id?'selected':''}>${th.name}</option>`;}).join('')}
-        </select>
-      </div>
+      <select style="font-size:12px;padding:6px 8px" onchange="filterTitle=this.value;renderSchedule()">
+        <option value="">公演名</option>
+        ${allTitles.map(t=>`<option value="${t}" ${filterTitle===t?'selected':''}>${t}</option>`).join('')}
+      </select>
+      <select style="font-size:12px;padding:6px 8px" onchange="filterTheater=this.value;renderSchedule()">
+        <option value="">劇場</option>
+        ${allTheaters.map(id=>{const th=getTheater(id);return `<option value="${id}" ${filterTheater===id?'selected':''}>${th.name}</option>`;}).join('')}
+      </select>
     </div>
     <div class="grid2">
-      <div>
-        <select style="font-size:12px;padding:6px 8px" onchange="filterMonth=this.value;renderSchedule()">
-          <option value="">月</option>
-          ${allMonths.map(m=>`<option value="${m}" ${filterMonth===m?'selected':''}>${m}</option>`).join('')}
-        </select>
-      </div>
-      <div>
-        <select style="font-size:12px;padding:6px 8px" onchange="filterType=this.value;renderSchedule()">
-          <option value="">種別</option>
-          <option value="self" ${filterType==='self'?'selected':''}>自分用</option>
-          <option value="companion" ${filterType==='companion'?'selected':''}>連番用</option>
-          <option value="duplicate" ${filterType==='duplicate'?'selected':''}>重複分</option>
-        </select>
-      </div>
+      <select style="font-size:12px;padding:6px 8px" onchange="filterMonth=this.value;renderSchedule()">
+        <option value="">月</option>
+        ${allMonths.map(m=>`<option value="${m}" ${filterMonth===m?'selected':''}>${m}</option>`).join('')}
+      </select>
+      <select style="font-size:12px;padding:6px 8px" onchange="filterType=this.value;renderSchedule()">
+        <option value="">種別</option>
+        <option value="self" ${filterType==='self'?'selected':''}>自分用</option>
+        <option value="companion" ${filterType==='companion'?'selected':''}>連番用</option>
+        <option value="duplicate" ${filterType==='duplicate'?'selected':''}>重複分</option>
+      </select>
     </div>
-    ${(filterTitle||filterTheater||filterMonth||filterType)?`<button class="btn xs" style="margin-top:8px;color:var(--text2)" onclick="filterTitle='';filterTheater='';filterMonth='';filterType='';renderSchedule()">✕ フィルタをクリア</button>`:''}
+    ${(filterTitle||filterTheater||filterMonth||filterType)?`<button class="btn xs" style="margin-top:8px;color:var(--text2)" onclick="filterTitle='';filterTheater='';filterMonth='';filterType='';renderSchedule()">✕ クリア</button>`:''}
   </div>`;
 
-  // ▼ 表示オプション（終了・非表示）
-  html+=`<details style="margin-bottom:10px">
+  // ▼ 一括座席確認（折りたたみ式、ボタンだけ標準表示）
+  const bulkable=visible.filter(p=>images[p.theaterId]);
+  if(bulkable.length>0){
+    html+=`<details id="bulk-details" style="margin-bottom:10px">
+      <summary style="list-style:none;background:#f0eaf8;border:1px solid #c8b0e0;border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-weight:700;color:#6040a0;cursor:pointer;display:flex;align-items:center;gap:6px">
+        🎭 選択した座席を一括表示
+      </summary>
+      <div style="background:#f8f4fc;border:1px solid #c8b0e0;border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px">
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <button class="btn xs" onclick="checkAllBulk(${JSON.stringify(bulkable.map(p=>p.id))})">全選択</button>
+          <button class="btn xs" onclick="checkedIds=new Set();renderSchedule()">全解除</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px">
+          ${bulkable.map(p=>{
+            const th=getTheater(p.theaterId);
+            return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
+              <input type="checkbox" ${checkedIds.has(p.id)?'checked':''} onchange="toggleCheck('${p.id}')" style="width:15px;height:15px;accent-color:#8060b0">
+              <span style="color:var(--text2)">${fmtDate(p.datetime)} ${th.name} ${p.rowLabel||''}列${p.seatNum||''}番</span>
+            </label>`;
+          }).join('')}
+        </div>
+        <button class="btn bulk-btn" onclick="openBulkSeatModal()">表示する</button>
+      </div>
+    </details>`;
+  }
+
+  // 公演カード
+  if(!visible.length){
+    html+='<div class="empty">表示できる公演がありません</div>';
+  } else {
+    visible.forEach(p=>{html+=buildScheduleCard(p);});
+  }
+
+  // ▼ 表示オプション（最下部）
+  html+=`<details style="margin-top:14px">
     <summary style="list-style:none;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px">
       ⚙️ 表示オプション
     </summary>
     <div style="background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px">
-      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-bottom:8px">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-bottom:10px">
         <input type="checkbox" ${showPast?'checked':''} onchange="showPast=this.checked;renderSchedule()" style="width:16px;height:16px;accent-color:var(--accent)">
         終了した公演を表示する
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-bottom:10px">
+        <input type="checkbox" ${memoCollapsed?'checked':''} onchange="toggleMemoCollapse(this.checked)" style="width:16px;height:16px;accent-color:var(--accent)">
+        メモ欄を折りたたむ
       </label>
       <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:6px">非表示の公演</div>
       ${hiddenPerfs.length
@@ -312,34 +366,13 @@ function renderSchedule(){
     </div>
   </details>`;
 
-  // ▼ 一括座席確認パネル
-  const bulkable=visible.filter(p=>images[p.theaterId]);
-  if(bulkable.length>0){
-    html+=`<div class="filter-box" style="margin-bottom:10px">
-      <div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px">🗺️ 一括座席位置確認</div>
-      <div style="display:flex;gap:6px;margin-bottom:8px">
-        <button class="btn xs" onclick="checkAllBulk(${JSON.stringify(bulkable.map(p=>p.id))})">全選択</button>
-        <button class="btn xs" onclick="checkedIds=new Set();renderSchedule()">全解除</button>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:8px">
-        ${bulkable.map(p=>{
-          const th=getTheater(p.theaterId);
-          return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
-            <input type="checkbox" ${checkedIds.has(p.id)?'checked':''} onchange="toggleCheck('${p.id}')" style="width:15px;height:15px;accent-color:#8060b0">
-            <span style="color:var(--text2)">${fmtDate(p.datetime)} ${th.name} ${p.rowLabel||''}列${p.seatNum||''}番</span>
-          </label>`;
-        }).join('')}
-      </div>
-      <button class="btn bulk-btn" onclick="openBulkSeatModal()">🎭 選択した座席を一括表示</button>
-    </div>`;
-  }
-
-  if(!visible.length){
-    html+='<div class="empty">表示できる公演がありません</div>';
-    el.innerHTML=html; return;
-  }
-  visible.forEach(p=>{html+=buildScheduleCard(p);});
   el.innerHTML=html;
+}
+
+function toggleMemoCollapse(val){
+  memoCollapsed=val;
+  localStorage.setItem('memoCollapsed',JSON.stringify(val));
+  renderSchedule();
 }
 
 function checkAllBulk(ids){ids.forEach(id=>checkedIds.add(id));renderSchedule();}
@@ -356,6 +389,10 @@ function buildScheduleCard(p){
     ?`<button class="btn seat-btn" style="margin-top:8px" onclick="openSingleSeatModal('${p.theaterId}','${p.rowLabel||''}','${p.seatNum||''}','${p.id}')">🎭 座席位置を確認する</button>`
     :`<button class="btn" style="margin-top:8px;font-size:12px;padding:6px;color:var(--text3)" disabled>🎭 座席表未登録</button>`;
 
+  const memoHtml=memoCollapsed
+    ?`<details style="margin-top:8px"><summary style="font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;list-style:none">▶ メモを表示</summary><textarea style="width:100%;padding:7px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;resize:vertical;min-height:44px;margin-top:4px" onchange="saveMemo('${p.id}',this.value)">${p.memo||''}</textarea></details>`
+    :`<div style="margin-top:8px"><div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:3px">メモ</div><textarea style="width:100%;padding:7px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;resize:vertical;min-height:44px" onchange="saveMemo('${p.id}',this.value)">${p.memo||''}</textarea></div>`;
+
   return `<div class="${cardCls}">
     <div class="card-header">
       ${whenBadge}${typeBadge(p.type)}
@@ -368,221 +405,15 @@ function buildScheduleCard(p){
     <div class="info-row"><span class="info-label">場所</span>${th.place||'—'}</div>
     <div class="info-row"><span class="info-label">座席</span><strong>${p.rowLabel||''}列 ${p.seatNum||''}番</strong> × ${p.count}枚</div>
     ${seatBtn}
-    <div style="margin-top:8px">
-      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:3px">メモ</div>
-      <textarea style="width:100%;padding:7px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:inherit;resize:vertical;min-height:44px" onchange="saveMemo('${p.id}',this.value)">${p.memo||''}</textarea>
-    </div>
+    ${memoHtml}
   </div>`;
 }
 
 async function saveMemo(id,val){const p=performances.find(x=>x.id===id);if(p){p.memo=val;await dbPut('performances',p);}}
 async function toggleHidePerf(id){const p=performances.find(x=>x.id===id);if(!p)return;p.hidden=!p.hidden;await dbPut('performances',p);await reloadAll();renderSchedule();}
-function toggleShowPast(){showPast=!showPast;renderSchedule();}
 
 // =============================================
-// 編集モーダル
-// =============================================
-let editingId=null;
-function openEditModal(id){
-  const p=performances.find(x=>x.id===id);if(!p)return;
-  editingId=id;
-  const titleOpts='<option value="">なし</option>'+titles.map(t=>`<option value="${t}"${p.title===t?' selected':''}>${t}</option>`).join('');
-  const theaterOpts=theaters.map(t=>`<option value="${t.id}"${p.theaterId===t.id?' selected':''}>${t.name}</option>`).join('');
-  const rowOpts=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}"${p.rowLabel===r?' selected':''}>${r}</option>`).join('');
-  document.getElementById('edit-form-body').innerHTML=`
-    <label class="field">公演タイトル</label>
-    <select id="e-title">${titleOpts}</select>
-    <label class="field">劇場</label>
-    <select id="e-theater">${theaterOpts}</select>
-    <label class="field">公演日時</label>
-    <input type="datetime-local" id="e-datetime" value="${p.datetime||''}">
-    <div class="grid2" style="margin-top:4px">
-      <div><label class="field">列</label><select id="e-row">${rowOpts}</select></div>
-      <div><label class="field">番号</label><input type="number" id="e-num" value="${p.seatNum||''}" min="1" max="40"></div>
-    </div>
-    <label class="field">枚数</label>
-    <input type="number" id="e-count" value="${p.count||1}" min="1" max="10">
-    <label class="field">チケット種別</label>
-    <div class="check-group">
-      <label class="check-item"><input type="radio" name="etype" value="self" ${p.type==='self'?'checked':''}> 自分用</label>
-      <label class="check-item"><input type="radio" name="etype" value="companion" ${p.type==='companion'?'checked':''}> 連番用</label>
-      <label class="check-item"><input type="radio" name="etype" value="duplicate" ${p.type==='duplicate'?'checked':''}> 重複分</label>
-    </div>
-    <label class="field">メモ</label>
-    <textarea id="e-memo">${p.memo||''}</textarea>`;
-  document.getElementById('edit-modal').classList.add('open');
-}
-function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');editingId=null;}
-async function saveEdit(){
-  if(!editingId)return;
-  const p=performances.find(x=>x.id===editingId);if(!p)return;
-  p.title=document.getElementById('e-title').value;
-  p.theaterId=document.getElementById('e-theater').value;
-  p.datetime=document.getElementById('e-datetime').value;
-  p.rowLabel=document.getElementById('e-row').value;
-  p.seatNum=document.getElementById('e-num').value;
-  p.count=parseInt(document.getElementById('e-count').value)||1;
-  p.type=document.querySelector('input[name="etype"]:checked')?.value||'self';
-  p.memo=document.getElementById('e-memo').value;
-  await dbPut('performances',p);await reloadAll();closeEditModal();renderSchedule();
-}
-
-// =============================================
-// 座席位置計算（銀河劇場）
-// ブロックごとに独立してX座標を計算（通路ずれ対策）
-// =============================================
-const GINGA_ROWS=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'];
-// 画像を直接ピクセル計測した実測値
-const GINGA_X={
-  L:{start:9.5, end:34.0, seatFrom:1,  seatTo:12}, // 青ブロック 1〜12番
-  M:{start:38.0,end:63.0, seatFrom:13, seatTo:24}, // 緑ブロック 13〜24番
-  R:{start:67.5,end:92.0, seatFrom:25, seatTo:36}, // 紫ブロック 25〜36番
-};
-// 各行Y座標（実測値・等間隔64px/1329px≒4.8%）
-const GINGA_ROW_Y=[16.0,20.8,25.6,30.4,35.2,40.0,44.8,49.7,54.5,59.3,64.1,68.9,73.7,78.6,83.4,88.2,93.0];
-function calcSeatPos(theaterId,rowLabel,seatNum){
-  if(theaterId!=='t_ginga')return null;
-  const rowIdx=GINGA_ROWS.indexOf(rowLabel);
-  if(rowIdx<0)return null;
-  const num=parseInt(seatNum);
-  const yPct=GINGA_ROW_Y[rowIdx];
-  let block;
-  if(num<=12)block=GINGA_X.L;
-  else if(num<=24)block=GINGA_X.M;
-  else block=GINGA_X.R;
-  const xPct=block.start+(num-block.seatFrom)/(block.seatTo-block.seatFrom)*(block.end-block.start);
-  return{x:xPct,y:yPct};
-}
-// =============================================
-// 座席モーダル（ピンチズーム対応）
-// =============================================
-let pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};
-
-function openSingleSeatModal(theaterId,rowLabel,seatNum,perfId){
-  const img=images[theaterId];if(!img)return;
-  document.getElementById('modal-img').src=img;
-  const dots=document.getElementById('modal-dots');
-  dots.innerHTML='';
-  const pos=calcSeatPos(theaterId,rowLabel,seatNum);
-  if(pos){
-    const p=performances.find(x=>x.id===perfId)||{};
-    const isBlue=(p.type==='companion'||p.type==='duplicate');
-    const dot=document.createElement('div');
-    dot.className='modal-dot';
-    dot.style.left=pos.x+'%';
-    dot.style.top=pos.y+'%';
-    dot.innerHTML=`<div class="dot${isBlue?' blue':''}"></div>`;
-    dots.appendChild(dot);
-  }
-  document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
-  resetPinch();
-  document.getElementById('seat-modal').classList.add('open');
-  initPinch();
-}
-
-function openBulkSeatModal(){
-  if(checkedIds.size===0){alert('公演を選択してください');return;}
-  const selected=performances.filter(p=>checkedIds.has(p.id));
-  if(!selected.length)return;
-  // 同じ劇場の公演のみ表示可能（最初の劇場を基準）
-  const theaterId=selected[0].theaterId;
-  const img=images[theaterId];
-  if(!img){alert('選択した公演の劇場に座席表画像が登録されていません');return;}
-  document.getElementById('modal-img').src=img;
-  const dots=document.getElementById('modal-dots');
-  dots.innerHTML='';
-  selected.forEach(p=>{
-    if(p.theaterId!==theaterId)return; // 異なる劇場はスキップ
-    const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
-    if(pos){
-      const dot=document.createElement('div');
-      dot.className='modal-dot';
-      dot.style.left=pos.x+'%';
-      dot.style.top=pos.y+'%';
-      const dateStr=fmtDate(p.datetime);
-      const isBlue=(p.type==='companion'||p.type==='duplicate');
-      dot.innerHTML=`<div class="dot-label">${dateStr}</div><div class="dot${isBlue?' blue':''}"></div>`;
-      dots.appendChild(dot);
-    }
-  });
-  document.getElementById('modal-hint').textContent='ピンチで拡大 ／ 異なる劇場は非表示';
-  resetPinch();
-  document.getElementById('seat-modal').classList.add('open');
-  initPinch();
-}
-
-function openImgModal(theaterId){
-  const img=images[theaterId];if(!img)return;
-  document.getElementById('modal-img').src=img;
-  document.getElementById('modal-dots').innerHTML='';
-  document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
-  resetPinch();
-  document.getElementById('seat-modal').classList.add('open');
-  initPinch();
-}
-
-function closeSeatModal(){document.getElementById('seat-modal').classList.remove('open');resetPinch();}
-
-function resetPinch(){
-  pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};
-  applyTransform();
-}
-function applyTransform(){
-  const el=document.getElementById('modal-inner');
-  el.style.transform=`translate(${pinchState.tx}px,${pinchState.ty}px) scale(${pinchState.scale})`;
-}
-function getDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
-function getMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
-
-function initPinch(){
-  const pc=document.getElementById('pinch-container');
-  pc.ontouchstart=e=>{
-    if(e.touches.length===2){
-      e.preventDefault();
-      pinchState.startDist=getDist(e.touches);
-      pinchState.lastScale=pinchState.scale;
-      const m=getMid(e.touches);
-      pinchState.startMx=m.x; pinchState.startMy=m.y;
-      pinchState.lastTx=pinchState.tx; pinchState.lastTy=pinchState.ty;
-    } else if(e.touches.length===1){
-      pinchState.startMx=e.touches[0].clientX-pinchState.tx;
-      pinchState.startMy=e.touches[0].clientY-pinchState.ty;
-    }
-  };
-  pc.ontouchmove=e=>{
-    e.preventDefault();
-    if(e.touches.length===2){
-      const dist=getDist(e.touches);
-      const newScale=Math.min(5,Math.max(1,pinchState.lastScale*(dist/pinchState.startDist)));
-      pinchState.scale=newScale;
-      const m=getMid(e.touches);
-      pinchState.tx=pinchState.lastTx+(m.x-pinchState.startMx);
-      pinchState.ty=pinchState.lastTy+(m.y-pinchState.startMy);
-      applyTransform();
-    } else if(e.touches.length===1&&pinchState.scale>1){
-      pinchState.tx=e.touches[0].clientX-pinchState.startMx;
-      pinchState.ty=e.touches[0].clientY-pinchState.startMy;
-      applyTransform();
-    }
-  };
-  pc.ontouchend=e=>{
-    if(e.touches.length<2&&pinchState.scale<1.05){resetPinch();}
-  };
-  // ダブルタップでリセット
-  let lastTap=0;
-  pc.onclick=e=>{
-    const now=Date.now();
-    if(now-lastTap<300){resetPinch();}
-    lastTap=now;
-  };
-}
-// モーダル外タップで閉じる
-document.getElementById('seat-modal').addEventListener('click',e=>{
-  if(e.target.id==='seat-modal')closeSeatModal();
-});
-
-// =============================================
-// TAB2: 座席表
+// TAB1: 座席表
 // =============================================
 let selectedTheater=null;
 function renderSeatView(){
@@ -590,7 +421,7 @@ function renderSeatView(){
   const chips=theaters.map(t=>`<div class="chip${selectedTheater===t.id?' selected':''}" onclick="selectTheater('${t.id}')">${t.name}</div>`).join('');
   let detail='';
   if(!selectedTheater){
-    detail='<div class="seat-placeholder">劇場を選択してください</div>';
+    detail='<div style="text-align:center;padding:2rem;color:var(--text3)">劇場を選択してください</div>';
   } else {
     const th=getTheater(selectedTheater);
     const img=images[selectedTheater];
@@ -604,15 +435,12 @@ function renderSeatView(){
       detail+=`<img class="seat-img" src="${img}" alt="座席表" onclick="openImgModal('${selectedTheater}')">`;
       perfs.filter(p=>!isPast(p.datetime)).forEach(p=>{
         const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
-        const markerColor=(p.type==='companion'||p.type==='duplicate')?'background:var(--blue)':'background:var(--red)';
-        if(pos){
-          detail+=`<div class="seat-marker" style="left:${pos.x}%;top:${pos.y}%;${markerColor}"></div>`;
-        } else if(p.markerX&&p.markerY){
-          detail+=`<div class="seat-marker" style="left:${p.markerX}%;top:${p.markerY}%;${markerColor}"></div>`;
-        }
+        const mc=(p.type==='companion'||p.type==='duplicate')?'background:var(--blue)':'background:var(--red)';
+        if(pos) detail+=`<div class="seat-marker" style="left:${pos.x}%;top:${pos.y}%;${mc}"></div>`;
+        else if(p.markerX&&p.markerY) detail+=`<div class="seat-marker" style="left:${p.markerX}%;top:${p.markerY}%;${mc}"></div>`;
       });
     } else {
-      detail+=`<div class="seat-placeholder"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="14" width="32" height="20" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/><rect x="24" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/></svg><span>座席表画像が未登録です</span></div>`;
+      detail+=`<div style="display:flex;align-items:center;justify-content:center;min-height:150px;flex-direction:column;gap:8px;color:var(--text3);font-size:13px"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="14" width="32" height="20" rx="3" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/><rect x="24" y="10" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1"/></svg><span>座席表画像が未登録です</span></div>`;
     }
     detail+='</div>';
     const btnLabel=img?'🖼️ 座席表画像を変更':'📁 座席表画像をアップロード';
@@ -639,6 +467,124 @@ async function deleteSeatImg(theaterId){if(!confirm('座席表画像を削除し
 async function deleteTheater(id){const th=getTheater(id);if(!confirm(`「${th.name}」を削除しますか？\n※公演データは残ります`))return;await dbDelete('theaters',id);await dbDelete('images',id);await reloadAll();selectedTheater=null;renderSeatView();}
 
 // =============================================
+// TAB2: カレンダー
+// =============================================
+function renderCalendar(){
+  const el=document.getElementById('pane2');
+  const year=calYear, month=calMonth;
+  const firstDay=new Date(year,month,1);
+  const lastDay=new Date(year,month+1,0);
+  const startDow=firstDay.getDay(); // 0=日
+  const totalCells=Math.ceil((startDow+lastDay.getDate())/7)*7;
+
+  // 公演をdateKeyでグルーピング
+  const perfByDate={};
+  performances.filter(p=>!p.hidden).forEach(p=>{
+    const k=dateKey(new Date(p.datetime));
+    if(!perfByDate[k])perfByDate[k]=[];
+    perfByDate[k].push(p);
+  });
+
+  const todayKey=dateKey(new Date());
+
+  let html=`<div style="padding:16px">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar()">＜</button>
+      <div class="cal-title">${year}年 ${month+1}月</div>
+      <button class="cal-nav" onclick="calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar()">＞</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
+      <div class="cal-dow">水</div><div class="cal-dow">木</div><div class="cal-dow sat">金</div>
+      <div class="cal-dow sat">土</div>`;
+
+  for(let i=0;i<totalCells;i++){
+    const dayOffset=i-startDow;
+    const d=new Date(year,month,1+dayOffset);
+    const isCurrentMonth=d.getMonth()===month;
+    const dk=dateKey(d);
+    const dow=d.getDay();
+    const isTodayCell=dk===todayKey;
+    let cellCls='cal-cell';
+    if(!isCurrentMonth)cellCls+=' other-month';
+    if(isTodayCell)cellCls+=' today-cell';
+    if(dow===0)cellCls+=' sun-cell';
+    if(dow===6)cellCls+=' sat-cell';
+
+    // 公演ドット
+    let dotsHtml='';
+    if(isCurrentMonth&&perfByDate[dk]){
+      perfByDate[dk].forEach(p=>{
+        dotsHtml+=`<div class="cal-perf-dot"><span class="dot" style="background:var(--red)"></span><span>${fmtTime(p.datetime)}</span></div>`;
+      });
+    }
+
+    // 公演期間バー
+    let runBars='';
+    if(isCurrentMonth){
+      runs.forEach((r,ri)=>{
+        const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
+        const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
+        if(d>=rStart&&d<=rEnd){
+          const color=RUN_COLORS[ri%RUN_COLORS.length];
+          const isFirst=dateKey(rStart)===dk;
+          const label=isFirst?r.title:'';
+          runBars+=`<div class="cal-run" style="background:${color}20;color:${color};border-left:2px solid ${color}">${isFirst?'▶ ':' '}${label}</div>`;
+        }
+      });
+    }
+
+    html+=`<div class="${cellCls}">
+      <div class="cal-day">${isCurrentMonth?d.getDate():''}</div>
+      ${runBars}${dotsHtml}
+    </div>`;
+  }
+  html+='</div>';
+
+  // 公演期間一覧
+  html+=`<div class="divider" style="margin-top:14px"></div>
+    <div class="section-title">公演期間</div>`;
+  if(runs.length){
+    runs.forEach((r,i)=>{
+      const color=RUN_COLORS[i%RUN_COLORS.length];
+      html+=`<div class="run-item">
+        <span style="width:10px;height:10px;border-radius:2px;background:${color};flex-shrink:0"></span>
+        <span style="flex:1;font-size:12px;font-weight:600">${r.title}</span>
+        <span style="font-size:11px;color:var(--text3)">${r.startDate}〜${r.endDate}</span>
+        <button class="del-btn" onclick="deleteRun('${r.id}')">削除</button>
+      </div>`;
+    });
+  } else {
+    html+='<div style="font-size:13px;color:var(--text3);padding:4px 0">登録なし</div>';
+  }
+
+  // 公演期間登録フォーム
+  const titleOpts='<option value="">タイトルを選択</option>'+titles.map(t=>`<option value="${t}">${t}</option>`).join('');
+  html+=`<div class="divider"></div>
+    <div class="section-title">公演期間を登録</div>
+    <label class="field">公演タイトル *</label>
+    <select id="run-title">${titleOpts}</select>
+    <div class="grid2">
+      <div><label class="field">開始日 *</label><input type="date" id="run-start"></div>
+      <div><label class="field">終了日 *</label><input type="date" id="run-end"></div>
+    </div>
+    <button class="btn primary" style="margin-top:10px" onclick="addRun()">期間を追加</button>
+  </div>`;
+
+  el.innerHTML=html;
+}
+
+async function addRun(){
+  const title=document.getElementById('run-title').value;
+  const startDate=document.getElementById('run-start').value;
+  const endDate=document.getElementById('run-end').value;
+  if(!title||!startDate||!endDate){alert('タイトル・開始日・終了日は必須です');return;}
+  await dbPut('runs',{id:'r'+Date.now(),title,startDate,endDate});
+  await reloadAll();renderCalendar();
+}
+async function deleteRun(id){if(!confirm('この公演期間を削除しますか？'))return;await dbDelete('runs',id);await reloadAll();renderCalendar();}
+
+// =============================================
 // TAB3: 登録
 // =============================================
 function renderRegPage(){
@@ -647,16 +593,11 @@ function renderRegPage(){
   const rowOpts=['','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}">${r||'選択'}</option>`).join('');
   const titleListHtml=titles.length?titles.map((t,i)=>`<div class="card" style="padding:9px 12px"><div class="row-flex"><span style="font-size:13px">${t}</span><button class="del-btn" onclick="deleteTitle(${i})">削除</button></div></div>`).join(''):'<div style="font-size:13px;color:var(--text3);padding:4px 0">未登録</div>';
   const perfListHtml=performances.length?[...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{const th=getTheater(p.theaterId);return `<div class="card" style="padding:9px 12px"><div class="row-flex">${typeBadge(p.type)}<span style="font-size:13px;font-weight:600">${th.name||'不明'}</span>${p.hidden?'<span class="badge hidden-b" style="font-size:10px">非表示</span>':''}<button class="del-btn" onclick="deletePerf('${p.id}')">削除</button></div>${p.title?`<div style="font-size:12px;color:var(--text2);margin-top:3px">${p.title}</div>`:''}<div style="font-size:12px;color:var(--text3);margin-top:2px">${fmtDt(p.datetime)} ／ ${p.rowLabel||''}列${p.seatNum||''}番 × ${p.count}枚</div></div>`;}).join(''):'<div class="empty">まだ登録されていません</div>';
-  // 劇場編集リスト生成（innerHTML設定後にセット）
-  const theaterEditHtml=theaters.map(t=>`<div class="card" style="padding:9px 12px">
-    <div class="row-flex">
-      <span style="font-size:13px;font-weight:600;flex:1">${t.name}</span>
-      <button class="edit-btn" onclick="openTheaterEdit('${t.id}')">✏️ 編集</button>
-    </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:2px">${t.place||''}${t.address?' / '+t.address:''}</div>
-    ${t.url?`<div style="font-size:11px;margin-top:2px"><a href="${t.url}" target="_blank" rel="noopener" style="color:var(--blue)">🔗 公式座席表</a></div>`:''}
-  </div>`).join('');
-  document.getElementById('pane2').innerHTML=`<div style="padding:16px">
+
+  // 劇場編集リスト（直接生成）
+  const theaterEditHtml=theaters.length?theaters.map(t=>`<div class="card" style="padding:9px 12px"><div class="row-flex"><span style="font-size:13px;font-weight:600;flex:1">${t.name}</span><button class="edit-btn" onclick="openTheaterEdit('${t.id}')">✏️ 編集</button></div><div style="font-size:11px;color:var(--text3);margin-top:2px">${t.place||''}${t.address?' / '+t.address:''}</div>${t.url?`<div style="font-size:11px;margin-top:2px"><a href="${t.url}" target="_blank" rel="noopener" style="color:var(--blue)">🔗 公式座席表</a></div>`:''}</div>`).join(''):'<div style="font-size:13px;color:var(--text3)">なし</div>';
+
+  document.getElementById('pane3').innerHTML=`<div style="padding:16px">
     <div class="section-title">公演を登録</div>
     <label class="field">公演タイトル *</label>
     <div class="row-flex"><select id="reg-title" style="flex:1">${titleOpts}</select><button class="btn sm" onclick="showAddTitle()">＋追加</button></div>
@@ -680,7 +621,7 @@ function renderRegPage(){
     <div class="section-title">公演タイトル管理</div>${titleListHtml}
     <div class="divider"></div>
     <div class="section-title">登録済み劇場を編集</div>
-    <div id="theater-edit-list"></div>
+    ${theaterEditHtml}
     <div class="divider"></div>
     <div class="section-title">劇場を新規登録</div>
     <label class="field">劇場名 *</label><input type="text" id="th-name" placeholder="例: 帝国劇場">
@@ -696,20 +637,7 @@ function renderRegPage(){
     <div class="section-title">登録済み公演一覧</div>${perfListHtml}
   </div>`;
 }
-// innerHTML設定後に劇場編集リストを反映
-function updateTheaterEditList(){
-  const el=document.getElementById('theater-edit-list');
-  if(!el)return;
-  el.innerHTML=theaters.map(t=>`<div class="card" style="padding:9px 12px">
-    <div class="row-flex">
-      <span style="font-size:13px;font-weight:600;flex:1">${t.name}</span>
-      <button class="edit-btn" onclick="openTheaterEdit('${t.id}')">✏️ 編集</button>
-    </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:2px">${t.place||''}${t.address?' / '+t.address:''}</div>
-    ${t.url?`<div style="font-size:11px;margin-top:2px"><a href="${t.url}" target="_blank" rel="noopener" style="color:var(--blue)">🔗 公式座席表</a></div>`:''}
-  </div>`).join('');
-  updateTheaterEditList();
-}
+
 function showAddTitle(){document.getElementById('add-title-form').style.display='block';}
 function hideAddTitle(){document.getElementById('add-title-form').style.display='none';document.getElementById('new-title-input').value='';}
 async function saveTitle(){const val=document.getElementById('new-title-input').value.trim();if(!val)return;if(titles.includes(val)){alert('すでに登録されています');return;}await dbPut('titles',{id:Date.now(),name:val});await reloadAll();hideAddTitle();renderRegPage();}
@@ -734,25 +662,64 @@ async function addTheater(){const name=document.getElementById('th-name').value.
 function exportExcel(){if(!performances.length){alert('登録されている公演がありません');return;}const BOM='\uFEFF';const headers=['公演タイトル','劇場名','場所','住所','公演日時','列','番号','枚数','種別','非表示','メモ'];const rows=[...performances].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime)).map(p=>{const th=getTheater(p.theaterId);return[p.title||'',th.name||'',th.place||'',th.address||'',fmtDt(p.datetime),p.rowLabel||'',p.seatNum||'',p.count,typeLabel(p.type),p.hidden?'非表示':'',(p.memo||'').replace(/\n/g,' ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');});const csv=BOM+[headers.join(','),...rows].join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='観劇記録.csv';a.click();URL.revokeObjectURL(url);}
 
 // =============================================
+// 編集モーダル（公演）
+// =============================================
+let editingId=null,editingMode='perf';
+function openEditModal(id){
+  editingId=id; editingMode='perf';
+  const p=performances.find(x=>x.id===id);if(!p)return;
+  const titleOpts='<option value="">なし</option>'+titles.map(t=>`<option value="${t}"${p.title===t?' selected':''}>${t}</option>`).join('');
+  const theaterOpts=theaters.map(t=>`<option value="${t.id}"${p.theaterId===t.id?' selected':''}>${t.name}</option>`).join('');
+  const rowOpts=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}"${p.rowLabel===r?' selected':''}>${r}</option>`).join('');
+  document.getElementById('edit-form-body').innerHTML=`
+    <label class="field">公演タイトル</label><select id="e-title">${titleOpts}</select>
+    <label class="field">劇場</label><select id="e-theater">${theaterOpts}</select>
+    <label class="field">公演日時</label><input type="datetime-local" id="e-datetime" value="${p.datetime||''}">
+    <div class="grid2" style="margin-top:4px">
+      <div><label class="field">列</label><select id="e-row">${rowOpts}</select></div>
+      <div><label class="field">番号</label><input type="number" id="e-num" value="${p.seatNum||''}" min="1" max="40"></div>
+    </div>
+    <label class="field">枚数</label><input type="number" id="e-count" value="${p.count||1}" min="1" max="10">
+    <label class="field">チケット種別</label>
+    <div class="check-group">
+      <label class="check-item"><input type="radio" name="etype" value="self" ${p.type==='self'?'checked':''}> 自分用</label>
+      <label class="check-item"><input type="radio" name="etype" value="companion" ${p.type==='companion'?'checked':''}> 連番用</label>
+      <label class="check-item"><input type="radio" name="etype" value="duplicate" ${p.type==='duplicate'?'checked':''}> 重複分</label>
+    </div>
+    <label class="field">メモ</label><textarea id="e-memo">${p.memo||''}</textarea>`;
+  document.querySelector('.edit-sheet-title').textContent='公演を編集';
+  document.getElementById('edit-save-btn').setAttribute('onclick','saveEdit()');
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');editingId=null;}
+async function saveEdit(){
+  if(!editingId)return;
+  const p=performances.find(x=>x.id===editingId);if(!p)return;
+  p.title=document.getElementById('e-title').value;
+  p.theaterId=document.getElementById('e-theater').value;
+  p.datetime=document.getElementById('e-datetime').value;
+  p.rowLabel=document.getElementById('e-row').value;
+  p.seatNum=document.getElementById('e-num').value;
+  p.count=parseInt(document.getElementById('e-count').value)||1;
+  p.type=document.querySelector('input[name="etype"]:checked')?.value||'self';
+  p.memo=document.getElementById('e-memo').value;
+  await dbPut('performances',p);await reloadAll();closeEditModal();renderSchedule();
+}
+
+// =============================================
 // 劇場編集
 // =============================================
 let editingTheaterId=null;
 function openTheaterEdit(id){
   editingTheaterId=id;
   const t=getTheater(id);
-  const rowOpts=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'].map(r=>`<option value="${r}">${r}</option>`).join('');
   document.getElementById('edit-form-body').innerHTML=`
-    <label class="field">劇場名 *</label>
-    <input type="text" id="eth-name" value="${t.name||''}">
-    <label class="field">場所（土地名）</label>
-    <input type="text" id="eth-place" value="${t.place||''}">
-    <label class="field">住所</label>
-    <input type="text" id="eth-address" value="${t.address||''}">
-    <label class="field">公式座席表URL</label>
-    <input type="url" id="eth-url" value="${t.url||''}" placeholder="https://...">`;
+    <label class="field">劇場名 *</label><input type="text" id="eth-name" value="${t.name||''}">
+    <label class="field">場所（土地名）</label><input type="text" id="eth-place" value="${t.place||''}">
+    <label class="field">住所</label><input type="text" id="eth-address" value="${t.address||''}">
+    <label class="field">公式座席表URL</label><input type="url" id="eth-url" value="${t.url||''}" placeholder="https://...">`;
   document.querySelector('.edit-sheet-title').textContent='劇場情報を編集';
-  // saveEditを劇場用に切り替え
-  document.querySelector('.edit-sheet .btn.primary').setAttribute('onclick','saveTheaterEdit()');
+  document.getElementById('edit-save-btn').setAttribute('onclick','saveTheaterEdit()');
   document.getElementById('edit-modal').classList.add('open');
 }
 async function saveTheaterEdit(){
@@ -763,12 +730,95 @@ async function saveTheaterEdit(){
   t.address=document.getElementById('eth-address').value.trim();
   t.url=document.getElementById('eth-url').value.trim();
   if(!t.name){alert('劇場名は必須です');return;}
-  await dbPut('theaters',t);
-  await reloadAll();
-  closeEditModal();
-  renderRegPage();
-  renderSeatView();
+  await dbPut('theaters',t);await reloadAll();closeEditModal();renderRegPage();renderSeatView();
 }
+
+// =============================================
+// 座席計算
+// =============================================
+const GINGA_ROWS=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q'];
+const GINGA_X={L:{start:9.5,end:34.0,seatFrom:1,seatTo:12},M:{start:38.0,end:63.0,seatFrom:13,seatTo:24},R:{start:67.5,end:92.0,seatFrom:25,seatTo:36}};
+const GINGA_ROW_Y=[16.0,20.8,25.6,30.4,35.2,40.0,44.8,49.7,54.5,59.3,64.1,68.9,73.7,78.6,83.4,88.2,93.0];
+function calcSeatPos(theaterId,rowLabel,seatNum){
+  if(theaterId!=='t_ginga')return null;
+  const rowIdx=GINGA_ROWS.indexOf(rowLabel);if(rowIdx<0)return null;
+  const num=parseInt(seatNum);
+  const yPct=GINGA_ROW_Y[rowIdx];
+  let block;if(num<=12)block=GINGA_X.L;else if(num<=24)block=GINGA_X.M;else block=GINGA_X.R;
+  const xPct=block.start+(num-block.seatFrom)/(block.seatTo-block.seatFrom)*(block.end-block.start);
+  return{x:xPct,y:yPct};
+}
+
+// =============================================
+// ピンチズーム
+// =============================================
+let pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};
+function openSingleSeatModal(theaterId,rowLabel,seatNum,perfId){
+  const img=images[theaterId];if(!img)return;
+  document.getElementById('modal-img').src=img;
+  const dots=document.getElementById('modal-dots');dots.innerHTML='';
+  const pos=calcSeatPos(theaterId,rowLabel,seatNum);
+  if(pos){
+    const p=performances.find(x=>x.id===perfId)||{};
+    const isBlue=(p.type==='companion'||p.type==='duplicate');
+    const dot=document.createElement('div');dot.className='modal-dot';
+    dot.style.left=pos.x+'%';dot.style.top=pos.y+'%';
+    dot.innerHTML=`<div class="dot${isBlue?' blue':''}"></div>`;
+    dots.appendChild(dot);
+  }
+  document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
+  resetPinch();document.getElementById('seat-modal').classList.add('open');initPinch();
+}
+function openBulkSeatModal(){
+  if(checkedIds.size===0){alert('公演を選択してください');return;}
+  const selected=performances.filter(p=>checkedIds.has(p.id));
+  if(!selected.length)return;
+  const theaterId=selected[0].theaterId;
+  const img=images[theaterId];
+  if(!img){alert('選択した公演の劇場に座席表画像が登録されていません');return;}
+  document.getElementById('modal-img').src=img;
+  const dots=document.getElementById('modal-dots');dots.innerHTML='';
+  selected.forEach(p=>{
+    if(p.theaterId!==theaterId)return;
+    const pos=calcSeatPos(p.theaterId,p.rowLabel,p.seatNum);
+    if(pos){
+      const isBlue=(p.type==='companion'||p.type==='duplicate');
+      const dot=document.createElement('div');dot.className='modal-dot';
+      dot.style.left=pos.x+'%';dot.style.top=pos.y+'%';
+      dot.innerHTML=`<div class="dot-label">${fmtDate(p.datetime)}</div><div class="dot${isBlue?' blue':''}"></div>`;
+      dots.appendChild(dot);
+    }
+  });
+  document.getElementById('modal-hint').textContent='ピンチで拡大 ／ 異なる劇場は非表示';
+  resetPinch();document.getElementById('seat-modal').classList.add('open');initPinch();
+}
+function openImgModal(theaterId){
+  const img=images[theaterId];if(!img)return;
+  document.getElementById('modal-img').src=img;
+  document.getElementById('modal-dots').innerHTML='';
+  document.getElementById('modal-hint').textContent='ピンチで拡大 / 2本指でスクロール';
+  resetPinch();document.getElementById('seat-modal').classList.add('open');initPinch();
+}
+function closeSeatModal(){document.getElementById('seat-modal').classList.remove('open');resetPinch();}
+function resetPinch(){pinchState={scale:1,lastScale:1,startDist:0,tx:0,ty:0,lastTx:0,lastTy:0,startMx:0,startMy:0};applyTransform();}
+function applyTransform(){document.getElementById('modal-inner').style.transform=`translate(${pinchState.tx}px,${pinchState.ty}px) scale(${pinchState.scale})`;}
+function getDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
+function getMid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
+function initPinch(){
+  const pc=document.getElementById('pinch-container');
+  pc.ontouchstart=e=>{
+    if(e.touches.length===2){e.preventDefault();pinchState.startDist=getDist(e.touches);pinchState.lastScale=pinchState.scale;const m=getMid(e.touches);pinchState.startMx=m.x;pinchState.startMy=m.y;pinchState.lastTx=pinchState.tx;pinchState.lastTy=pinchState.ty;}
+    else if(e.touches.length===1){pinchState.startMx=e.touches[0].clientX-pinchState.tx;pinchState.startMy=e.touches[0].clientY-pinchState.ty;}
+  };
+  pc.ontouchmove=e=>{
+    e.preventDefault();
+    if(e.touches.length===2){const dist=getDist(e.touches);pinchState.scale=Math.min(5,Math.max(1,pinchState.lastScale*(dist/pinchState.startDist)));const m=getMid(e.touches);pinchState.tx=pinchState.lastTx+(m.x-pinchState.startMx);pinchState.ty=pinchState.lastTy+(m.y-pinchState.startMy);applyTransform();}
+    else if(e.touches.length===1&&pinchState.scale>1){pinchState.tx=e.touches[0].clientX-pinchState.startMx;pinchState.ty=e.touches[0].clientY-pinchState.startMy;applyTransform();}
+  };
+  pc.ontouchend=e=>{if(e.touches.length<2&&pinchState.scale<1.05)resetPinch();};
+  let lastTap=0;pc.onclick=e=>{const now=Date.now();if(now-lastTap<300)resetPinch();lastTap=now;};
+}
+document.getElementById('seat-modal').addEventListener('click',e=>{if(e.target.id==='seat-modal')closeSeatModal();});
 
 // =============================================
 // 起動
