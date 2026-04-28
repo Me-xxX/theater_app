@@ -112,7 +112,10 @@ textarea{resize:vertical;min-height:56px}
 .cal-cell.sat-cell .cal-day{color:#4060a0}
 .cal-perf-dot{display:flex;align-items:center;gap:2px;font-size:9px;color:var(--text);margin-bottom:1px;line-height:1.3}
 .cal-perf-dot .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
-.cal-run{font-size:8px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:2px;padding:0 2px;line-height:1.6}
+.cal-run{font-size:8px;margin-top:1px;overflow:hidden;border-radius:2px;padding:1px 3px;line-height:1.5;white-space:nowrap;text-overflow:ellipsis;max-width:100%;box-sizing:border-box}
+.cal-run.run-start{border-radius:3px 0 0 3px}
+.cal-run.run-mid{border-radius:0;padding-left:2px}
+.cal-run.run-end{border-radius:0 3px 3px 0}
 /* 公演期間登録 */
 .run-item{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
 ::-webkit-scrollbar{width:4px}
@@ -328,7 +331,7 @@ function renderSchedule(){
           ${bulkable.map(p=>{
             const th=getTheater(p.theaterId);
             return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
-              <input type="checkbox" ${checkedIds.has(p.id)?'checked':''} onchange="toggleCheck('${p.id}')" style="width:15px;height:15px;accent-color:#8060b0">
+              <input type="checkbox" data-bulkid="${p.id}" ${checkedIds.has(p.id)?'checked':''} onchange="toggleCheck('${p.id}')" style="width:15px;height:15px;accent-color:#8060b0">
               <span style="color:var(--text2)">${fmtDate(p.datetime)} ${th.name} ${p.rowLabel||''}列${p.seatNum||''}番</span>
             </label>`;
           }).join('')}
@@ -375,8 +378,17 @@ function toggleMemoCollapse(val){
   renderSchedule();
 }
 
-function checkAllBulk(ids){ids.forEach(id=>checkedIds.add(id));renderSchedule();}
-function toggleCheck(id){if(checkedIds.has(id))checkedIds.delete(id);else checkedIds.add(id);renderSchedule();}
+function checkAllBulk(ids){
+  ids.forEach(id=>{
+    checkedIds.add(id);
+    const cb=document.querySelector(`input[data-bulkid="${id}"]`);
+    if(cb)cb.checked=true;
+  });
+}
+function toggleCheck(id){
+  if(checkedIds.has(id))checkedIds.delete(id);else checkedIds.add(id);
+  // DOMは既にチェックボックスが更新済み、再描画不要
+}
 
 function buildScheduleCard(p){
   const th=getTheater(p.theaterId);
@@ -467,6 +479,32 @@ async function deleteSeatImg(theaterId){if(!confirm('座席表画像を削除し
 async function deleteTheater(id){const th=getTheater(id);if(!confirm(`「${th.name}」を削除しますか？\n※公演データは残ります`))return;await dbDelete('theaters',id);await dbDelete('images',id);await reloadAll();selectedTheater=null;renderSeatView();}
 
 // =============================================
+// 日本祝日計算
+// =============================================
+function calcJpHolidays(year){
+  const h=new Set();
+  const add=(m,d)=>h.add(`${year}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
+  // 固定祝日
+  add(1,1);add(2,11);add(2,23);add(4,29);add(5,3);add(5,4);add(5,5);
+  add(8,11);add(11,3);add(11,23);
+  // 成人の日(1月第2月曜)
+  let d=new Date(year,0,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);d.setDate(d.getDate()+7);add(1,d.getDate());
+  // 海の日(7月第3月曜)
+  d=new Date(year,6,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);d.setDate(d.getDate()+14);add(7,d.getDate());
+  // 敬老の日(9月第3月曜)
+  d=new Date(year,8,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);d.setDate(d.getDate()+14);add(9,d.getDate());
+  // スポーツの日(10月第2月曜)
+  d=new Date(year,9,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);d.setDate(d.getDate()+7);add(10,d.getDate());
+  // 春分(簡易計算)
+  const spr=Math.floor(20.8431+0.242194*(year-1980)-Math.floor((year-1980)/4));
+  add(3,spr);
+  // 秋分(簡易計算)
+  const aut=Math.floor(23.2488+0.242194*(year-1980)-Math.floor((year-1980)/4));
+  add(9,aut);
+  return h;
+}
+
+// =============================================
 // TAB2: カレンダー
 // =============================================
 function renderCalendar(){
@@ -479,13 +517,14 @@ function renderCalendar(){
 
   // 公演をdateKeyでグルーピング
   const perfByDate={};
-  performances.filter(p=>!p.hidden).forEach(p=>{
+  performances.filter(p=>!p.hidden&&p.type==='self').forEach(p=>{
     const k=dateKey(new Date(p.datetime));
     if(!perfByDate[k])perfByDate[k]=[];
     perfByDate[k].push(p);
   });
 
   const todayKey=dateKey(new Date());
+  const jpHolidays=calcJpHolidays(year);
 
   let html=`<div style="padding:16px">
     <div class="cal-header">
@@ -495,7 +534,7 @@ function renderCalendar(){
     </div>
     <div class="cal-grid">
       <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
-      <div class="cal-dow">水</div><div class="cal-dow">木</div><div class="cal-dow sat">金</div>
+      <div class="cal-dow">水</div><div class="cal-dow">木</div><div class="cal-dow">金</div>
       <div class="cal-dow sat">土</div>`;
 
   for(let i=0;i<totalCells;i++){
@@ -505,10 +544,11 @@ function renderCalendar(){
     const dk=dateKey(d);
     const dow=d.getDay();
     const isTodayCell=dk===todayKey;
+    const isHoliday=isCurrentMonth&&jpHolidays.has(dk);
     let cellCls='cal-cell';
     if(!isCurrentMonth)cellCls+=' other-month';
     if(isTodayCell)cellCls+=' today-cell';
-    if(dow===0)cellCls+=' sun-cell';
+    if(dow===0||isHoliday)cellCls+=' sun-cell';
     if(dow===6)cellCls+=' sat-cell';
 
     // 公演ドット
@@ -525,11 +565,18 @@ function renderCalendar(){
       runs.forEach((r,ri)=>{
         const rStart=new Date(r.startDate);rStart.setHours(0,0,0,0);
         const rEnd=new Date(r.endDate);rEnd.setHours(23,59,59,999);
+        // 休演日チェック
+        const isRestDay=(r.restDays||[]).includes(dk);
         if(d>=rStart&&d<=rEnd){
           const color=RUN_COLORS[ri%RUN_COLORS.length];
-          const isFirst=dateKey(rStart)===dk;
-          const label=isFirst?r.title:'';
-          runBars+=`<div class="cal-run" style="background:${color}20;color:${color};border-left:2px solid ${color}">${isFirst?'▶ ':' '}${label}</div>`;
+          if(isRestDay){
+            runBars+=`<div style="font-size:8px;color:#4060c0;font-weight:700;padding:1px 2px">休演日</div>`;
+          } else {
+            const isFirst=dateKey(rStart)===dk;
+            const posCls=isFirst?'run-start':dateKey(rEnd)===dk?'run-end':'run-mid';
+            const label=isFirst?'▶ '+r.title:'';
+            runBars+=`<div class="cal-run ${posCls}" style="background:${color}25;color:${color};border-left:${isFirst?'2px':'1px'} solid ${color}">${label}</div>`;
+          }
         }
       });
     }
@@ -547,10 +594,14 @@ function renderCalendar(){
   if(runs.length){
     runs.forEach((r,i)=>{
       const color=RUN_COLORS[i%RUN_COLORS.length];
-      html+=`<div class="run-item">
-        <span style="width:10px;height:10px;border-radius:2px;background:${color};flex-shrink:0"></span>
-        <span style="flex:1;font-size:12px;font-weight:600">${r.title}</span>
-        <span style="font-size:11px;color:var(--text3)">${r.startDate}〜${r.endDate}</span>
+      const restLabel=(r.restDays&&r.restDays.length)?`<div style="font-size:10px;color:#4060c0;margin-top:1px">休演: ${r.restDays.join(', ')}</div>`:'';
+      html+=`<div class="run-item" style="flex-wrap:wrap;align-items:flex-start">
+        <span style="width:10px;height:10px;border-radius:2px;background:${color};flex-shrink:0;margin-top:2px"></span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600">${r.title}${r.area?` <span style="font-weight:400;color:var(--text3)">／${r.area}</span>`:''}</div>
+          <div style="font-size:11px;color:var(--text3)">${r.startDate}〜${r.endDate}</div>
+          ${restLabel}
+        </div>
         <button class="del-btn" onclick="deleteRun('${r.id}')">削除</button>
       </div>`;
     });
@@ -564,10 +615,15 @@ function renderCalendar(){
     <div class="section-title">公演期間を登録</div>
     <label class="field">公演タイトル *</label>
     <select id="run-title">${titleOpts}</select>
+    <label class="field">開催地（例：東京・大阪）</label>
+    <input type="text" id="run-area" placeholder="例: 東京">
     <div class="grid2">
       <div><label class="field">開始日 *</label><input type="date" id="run-start"></div>
       <div><label class="field">終了日 *</label><input type="date" id="run-end"></div>
     </div>
+    <label class="field">休演日（複数可・カンマ区切り）</label>
+    <input type="text" id="run-rest" placeholder="例: 2026-05-07,2026-05-14">
+    <div style="font-size:11px;color:var(--text3);margin-top:2px">YYYY-MM-DD形式で入力してください</div>
     <button class="btn primary" style="margin-top:10px" onclick="addRun()">期間を追加</button>
   </div>`;
 
@@ -576,10 +632,13 @@ function renderCalendar(){
 
 async function addRun(){
   const title=document.getElementById('run-title').value;
+  const area=document.getElementById('run-area').value.trim();
   const startDate=document.getElementById('run-start').value;
   const endDate=document.getElementById('run-end').value;
+  const restRaw=document.getElementById('run-rest').value.trim();
+  const restDays=restRaw?restRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
   if(!title||!startDate||!endDate){alert('タイトル・開始日・終了日は必須です');return;}
-  await dbPut('runs',{id:'r'+Date.now(),title,startDate,endDate});
+  await dbPut('runs',{id:'r'+Date.now(),title,area,startDate,endDate,restDays});
   await reloadAll();renderCalendar();
 }
 async function deleteRun(id){if(!confirm('この公演期間を削除しますか？'))return;await dbDelete('runs',id);await reloadAll();renderCalendar();}
